@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RO</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script>
+
+            function set_array() {
+                let num_vars = document.getElementById('num_vars').value;
+                let num_conts = document.getElementById('num_conts').value;
+
+            }
+        </script>
+    </head>
+    <body class="center_widget">
+    <table border="5">
+        <tr>
+            <td width ="250px">Nombre des variables :</td>
+            <td>
+                <input type="button" value="-" onclick="var_dec()" />
+                <input  type="text" value="1" disabled="disabled" id="num_vars" size="7" style="text-align:right" />
+                <input type="button" value="+" onclick="var_inc()" />
+            </td>
+        </tr>
+        <tr>
+            <td>Nombre des contraintes :</td>
+            <td>
+                <input type="button" value="-" onclick="cont_dec()" />
+                <input type="text" value="1" disabled="disabled" id="num_conts" size="7" style="text-align:right" />
+                <input type="button" value="+" onclick="cont_inc()" />
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="Prochain pas &rarr;" onclick="set_array()" />
+    <script src="inc_dec.js"></script>
+    </body>
+</html>
