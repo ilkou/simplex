@@ -4,34 +4,168 @@
         <title>RO</title>
         <link rel="stylesheet" type="text/css" href="style.css">
         <script>
-
-            function set_array() {
-                let num_vars = document.getElementById('num_vars').value;
-                let num_conts = document.getElementById('num_conts').value;
-
+            function setAttributes(element, attrs) {
+                for(let key in attrs) {
+                    element.setAttribute(key, attrs[key]);
+                }
             }
+            function createObjFunction(container, num_vars){
+                let title = document.createElement('h1');
+                title.innerHTML = 'Fonction objectif';
+                container.appendChild(title);
+                let table = document.createElement('table');
+                setAttributes(table, {'border': 0, 'cellspacing': 2, 'cellpadding': 2});
+                let tr = document.createElement('tr');
+                let th = document.createElement('th');
+                tr.appendChild(th);
+                for (let i = 1; i <= num_vars; i++) {
+                    let th = document.createElement('th');
+                    th.innerHTML = 'x' + '<sub>' + i.toString();
+                    th.setAttribute('align', 'center');
+                    tr.appendChild(th);
+                }
+                table.appendChild(tr);
+                tr = document.createElement('tr');
+                let td = document.createElement('td');
+                let select = document.createElement('select');
+                let option = document.createElement('option');
+                option.innerHTML = 'min';
+                option.setAttribute('value', 'min');
+                select.appendChild(option);
+                option = document.createElement('option');
+                option.innerHTML = 'max';
+                option.setAttribute('value', 'max');
+                select.appendChild(option);
+                td.appendChild(select);
+                tr.appendChild(td);
+                for (let i = 1; i <= num_vars; i++) {
+                    let td = document.createElement('td');
+                    let input = document.createElement('input');
+                    setAttributes(input, {'type': 'text', 'size': '2'})
+                    setAttributes(td, {'align': 'center'});
+                    td.appendChild(input);
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+                container.appendChild(table);
+            }
+            function createContraintes(container, num_vars, num_conts) {
+                let title = document.createElement('h1');
+                title.innerHTML = 'Contraintes';
+                container.appendChild(title);
+                let table = document.createElement('table');
+                setAttributes(table, {'border': 0, 'cellspacing': 2, 'cellpadding': 2});
+                let tr = document.createElement('tr');
+                let td = document.createElement('td');
+                tr.appendChild(td);
+                for (let i = 1; i <= num_vars; i++) {
+                    let th = document.createElement('th');
+                    th.innerHTML = 'x' + '<sub>' + i.toString();
+                    th.setAttribute('align', 'center');
+                    tr.appendChild(th);
+                }
+                let th = document.createElement('th');
+                th.innerHTML = 'Operator';
+                tr.appendChild(th);
+                th = document.createElement('th');
+                th.innerHTML = 'b';
+                tr.appendChild(th);
+                table.appendChild(tr);
+                for (let i = 1; i <= num_conts; i++) {
+                    tr = document.createElement('tr');
+                    td = document.createElement('td');
+                    td.innerHTML = 'Contraintes ' + i.toString();
+                    td.style.width = '120px';
+                    tr.appendChild(td);
+                    for (let j = 1; j <= num_vars; j++) {
+                        let td = document.createElement('td');
+                        let input = document.createElement('input');
+                        setAttributes(input, {'type': 'text', 'size': '4', 'name': 'coef'});
+                        setAttributes(td, {'align': 'center'});
+                        td.appendChild(input);
+                        tr.appendChild(td);
+                    }
+                    td = document.createElement('td');
+                    td.setAttribute('align', 'center');
+                    let select = document.createElement('select');
+                    let option = document.createElement('option');
+                    option.innerHTML = '&le;';
+                    option.setAttribute('value', 'le');
+                    select.appendChild(option);
+                    option = document.createElement('option');
+                    option.innerHTML = '&ge;';
+                    option.setAttribute('value', 'ge');
+                    select.appendChild(option);
+                    option = document.createElement('option');
+                    option.innerHTML = '=';
+                    option.setAttribute('value', 'qe');
+                    select.appendChild(option);
+                    td.appendChild(select);
+                    tr.appendChild(td);
+                    td = document.createElement('td');
+                    let input = document.createElement('input');
+                    setAttributes(input, {'type': 'text', 'size': '3'});
+                    setAttributes(td, {'align': 'center'});
+                    td.appendChild(input);
+                    tr.appendChild(td);
+                    table.appendChild(tr);
+                }
+                container.appendChild(table);
+            }
+            function get_array() {
+                document.getElementById('array').style.display = 'none';
+                let arr = document.getElementsByName('coef');
+                for (i = 0; i < num_conts; i++) {
+                    for (j = 0; j < num_vars; j++) {
+                        let x = i * num_vars + j;
+                        //console.log(x.toString());
+                        if (x < arr.length) {
+                            let y = arr[x].value;
+                            console.log(y.toString());
+                        }
+                    }
+                    console.log('<br />');
+                }
+            }
+            function set_array() {
+                document.getElementById('init').style.display = 'none';
+                let container = document.getElementById('array');
+                createObjFunction(container, num_vars);
+                createContraintes(container, num_vars, num_conts);
+                let input = document.createElement('input');
+                setAttributes(input, {'type':'button', 'value':'Prochain pas →', 'onclick': 'get_array()', 'style': "margin-top: 15px; float: right"})
+                container.appendChild(input);
+            }
+
         </script>
     </head>
-    <body class="center_widget">
-    <table border="5">
-        <tr>
-            <td width ="250px">Nombre des variables :</td>
-            <td>
-                <input type="button" value="-" onclick="var_dec()" />
-                <input  type="text" value="1" disabled="disabled" id="num_vars" size="7" style="text-align:right" />
-                <input type="button" value="+" onclick="var_inc()" />
-            </td>
-        </tr>
-        <tr>
-            <td>Nombre des contraintes :</td>
-            <td>
-                <input type="button" value="-" onclick="cont_dec()" />
-                <input type="text" value="1" disabled="disabled" id="num_conts" size="7" style="text-align:right" />
-                <input type="button" value="+" onclick="cont_inc()" />
-            </td>
-        </tr>
-    </table>
-    <input type="button" value="Prochain pas &rarr;" onclick="set_array()" />
-    <script src="inc_dec.js"></script>
+    <body>
+    <div class="center_widget" id="init">
+        <table border="5">
+            <tr>
+                <td width ="250px">Nombre des variables :</td>
+                <td>
+                    <input type="button" value="-" onclick="var_dec()" />
+                    <input  type="text" value="1" disabled="disabled" id="num_vars" size="7" style="text-align:right" />
+                    <input type="button" value="+" onclick="var_inc()" />
+                </td>
+            </tr>
+            <tr>
+                <td>Nombre des contraintes :</td>
+                <td>
+                    <input type="button" value="-" onclick="cont_dec()" />
+                    <input type="text" value="1" disabled="disabled" id="num_conts" size="7" style="text-align:right" />
+                    <input type="button" value="+" onclick="cont_inc()" />
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="Prochain pas &rarr;" onclick="set_array()" style="margin-top: 15px; float: right"/>
+        <script src="inc_dec.js"></script>
+    </div>
+    <script>
+        num_vars = document.getElementById('num_vars').value;
+        num_conts = document.getElementById('num_conts').value;
+    </script>
+    <div class="center_widget" id="array"></div>
     </body>
 </html>
