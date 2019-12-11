@@ -130,6 +130,8 @@
             function set_array() {
                 document.getElementById('init').style.display = 'none';
                 let container = document.getElementById('array');
+		if (parseInt(num_vars) > 15 || parseInt(num_conts) > 15)
+		    container.removeAttribute("class");
                 createObjFunction(container, num_vars);
                 createContraintes(container, num_vars, num_conts);
                 let input = document.createElement('input');
