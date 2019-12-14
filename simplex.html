@@ -17,13 +17,26 @@
                 }
                 return false;
             }
-            function print_tab(tab, height)
+            function print_tab(tab, width, height)
             {
-                for(let i = 0; i < height ; i++)
-                {
-                    document.write(tab[i] + "<br\>");
+                let container = document.getElementById('table');
+                let table = document.createElement('table');
+                setAttributes(table, {'border': 1, 'cellspacing': 2, 'cellpadding': 1});
+                for (let i = 0; i < height ; i++) {
+                    let tr = document.createElement('tr');
+                    for (let j = 0; j < width; j++) {
+                        let td = document.createElement(i == 0 || j == 0 ? 'th' : 'td');
+                        setAttributes(td, {'style': 'width: 10%; text-align:center'});
+                        let x = tab[i][j];
+                        if (x == null)
+                            td.appendChild(document.createTextNode("-"));
+                        else
+                            td.appendChild(document.createTextNode(x.toString()));
+                        tr.appendChild(td);
+                    }
+                    table.appendChild(tr);
                 }
-                document.write("<br\>");
+                container.appendChild(table);
             }
             function toFloat(num) {
                 if (num == null || num == "")
@@ -209,7 +222,7 @@
                 //coef du b/ratio :
                 for (let i = 1; i < height - 1; i++) {
                     tab[i][width - 2] = toFloat(document.getElementById('b' + i.toString()).value);
-                    tab[i][width - 1] = undefined;
+                    tab[i][width - 1] = "";
                 }
                 //coef du dernier ligne:
                 if (is_phase1) {
@@ -219,16 +232,19 @@
                         else
                             tab[height - 1][j] = parseFloat('0');
                     }
+                    tab[height - 1][width - 2] = "";
+                    tab[height - 1][width - 1] = "";
                 }
                 else {
-                    for (let j = 1; j <= num_vars; j++) {
+                    for (let j = 1; j < width - 1; j++) {
                         if (tab[0][j][0] === 'x')
                             tab[height - 1][j] = toFloat(document.getElementById('x' + j.toString()).value);
                         else
                             tab[height - 1][j] = parseFloat('0');
                     }
+                    tab[height - 1][width - 1] = "";
                 }
-                print_tab(tab, height);
+                print_tab(tab, width, height);
 
             }
             function set_array() {
@@ -273,5 +289,6 @@
         //num_conts = document.getElementById('num_conts').value;
     </script>
     <div class="center_widget" id="array"></div>
+    <div id="table"></div>
     </body>
 </html>
