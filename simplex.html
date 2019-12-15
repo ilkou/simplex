@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RO</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="tools.js"></script>
+        <script src="printArray.js"></script>
+        <script src="createObjFunction.js"></script>
+        <script src="createContraintes.js"></script>
+        <script src="getArray.js"></script>
+        <script src="script.js"></script>
+        <script src="setArray.js"></script>
+        
+    </head>
+    <body>
+    <div class="center_widget" id="init">
+        <table border="5">
+            <tr>
+                <td width ="250px">Nombre des variables :</td>
+                <td>
+                    <input type="button" value="-" onclick="var_dec()" />
+                    <input  type="text" value="1" disabled="disabled" id="num_vars" size="7" style="text-align:right" />
+                    <input type="button" value="+" onclick="var_inc()" />
+                </td>
+            </tr>
+            <tr>
+                <td>Nombre des contraintes :</td>
+                <td>
+                    <input type="button" value="-" onclick="cont_dec()" />
+                    <input type="text" value="1" disabled="disabled" id="num_conts" size="7" style="text-align:right" />
+                    <input type="button" value="+" onclick="cont_inc()" />
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="Prochain pas &rarr;" onclick="setArray()" style="margin-top: 15px; float: right"/>
+        <script src="inc_dec.js"></script>
+    </div>
+    <div class="center_widget" id="array"></div>
+    <div id="table"></div>
+    </body>
+</html>
