@@ -2,11 +2,14 @@ function get_column(tab, width, height, index)
 {
 	var col  = new Array(height);
 
-	for (var i = 0; i < height - 1; i++)
+	for (var i = 1; i < height - 1; i++)
 	{
 		col[i] = tab[i][width - 2] / tab[i][index];
-		if(col[i] < 0)
+		tab[i][width - 1] =  tab[i][width - 2] / tab[i][index];
+		if(col[i] < 0) {
 			col[i] = Infinity;
+			tab[i][width - 1] = Infinity;
+		}
 	}
 	return (col);
 }
@@ -193,11 +196,12 @@ function phas1_to_2(tab, n, m)
 	}
 	return(new_tab);
 }
-function check_infinie(tab,width,height)
+function check_infinie(tab, width, height)
 {
-	for(var i = 1; i < height - 2; i++)
+	for(let i = 1; i < height - 1; i++)
 	{
-		if(tab[width -2][i] != Infinity)
+		console.log(tab[i][width - 1]);
+		if(tab[i][width - 1] != Infinity)
 			return (false);
 	}
 	return (true);
@@ -216,12 +220,13 @@ function simplex()
 		correction(tab,width,height);
 		while(check_negative(tab, height, width))
 		{
-			if(check_infinie(tab,width,height))
+
+			var point =  pivot(tab, width ,height, choix);
+			if(check_infinie(tab, width, height))
 			{
 				alert("probleme non bornee")
-					return;
+				return;
 			}
-			var point =  pivot(tab, width ,height, choix);
 			tab = gauss(tab,height , width, point[0], point[1], choix);
 			printArray(tab, width, height);
 		}
@@ -248,12 +253,14 @@ function simplex()
 	choix = e.options[e.selectedIndex].value;
 	while(check_pos_neg(tab, height, width, choix))
 	{
-		if(check_infinie(tab,width,height))
-			{
-				alert("probleme non bornee")
-					return;
-			}
+
 		var point =  pivot(tab, width ,height, choix);
+
+		if(check_infinie(tab,width,height))
+		{
+			alert("probleme non bornee")
+			return;
+		}
 		tab = gauss(tab,height , width, point[0], point[1], choix);
 		printArray(tab, width, height);
 	}

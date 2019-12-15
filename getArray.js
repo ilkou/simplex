@@ -8,7 +8,14 @@ function getArray() {
 	let fct_obj = e.options[e.selectedIndex].value;
 	console.log('il s\'agit de ' + fct_obj);
 	for (let k = 1; k <= num_conts; k++) {
+		let b = toFloat(document.getElementById('b' + k.toString()).value);
 		let operator = document.getElementById("operator" + k.toString()).value;
+		if (b < 0.0) {
+			if (operator === '>')
+				operator = '<';
+			else if (operator === '<')
+				operator = '>';
+		}
 		width += 1;
 		if (operator === ">")
 			width += 1;
@@ -23,7 +30,14 @@ function getArray() {
 	let vars = new Array();
 	let is_phase1 = 0;
 	for (let j = 1; j < height - 1; j++) {
+		let b = toFloat(document.getElementById('b' + j.toString()).value);
 		let operator = document.getElementById("operator" + j.toString()).value;
+		if (b < 0.0) {
+			if (operator === '>')
+				operator = '<';
+			else if (operator === '<')
+				operator = '>';
+		}
 		if (operator === '<')
 			tab[j][0] = 'e' + j.toString();
 		else {
@@ -53,8 +67,12 @@ function getArray() {
 	/*coef du variables :*/
 	for (let j = 1; j <= num_vars; j++) {
 		for (let i = 1; i <= num_conts; i++) {
+			let b = toFloat(document.getElementById('b' + i.toString()).value);
 			let x = document.getElementById('coef[' + i.toString() + '][' + j.toString() + ']');
-			tab[i][j] = toFloat(x.value);
+			if (b < 0.0)
+				tab[i][j] = (-1) * toFloat(x.value);
+			else
+				tab[i][j] = toFloat(x.value);
 		}
 		console.log('<br />');
 	}
@@ -72,6 +90,8 @@ function getArray() {
 	/*coef du b/ratio :*/
 	for (let i = 1; i < height - 1; i++) {
 		tab[i][width - 2] = toFloat(document.getElementById('b' + i.toString()).value);
+		if (tab[i][width - 2] < 0.0)
+			tab[i][width - 2] = -tab[i][width - 2];
 		tab[i][width - 1] = "";
 	}
 	/*coef du dernier ligne:*/
