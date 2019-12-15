@@ -16,3 +16,13 @@ function toFloat(num) {
 		return (parseFloat(0).toFixed(2));
 	return (parseFloat(num).toFixed(2));
 }
+function is_equal(tab1, tab2, width, height)
+{
+	for (let i = 1; i < height; i++) {
+		for (let j = 1; j < width; j++) {
+			if (tab1[i][j] == tab2[i][j])
+				return (false);
+		}
+	}
+	return (true);
+}

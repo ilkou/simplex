@@ -208,11 +208,28 @@ function check_infinie(tab, width, height)
 }
 function simplex()
 {
-	let all = getArray();
-	let tab = all[0];
-	let width = all[1];//n
-	let height = all[2];
-	let is_phase = all[3];
+	document.getElementById('array').style.display = 'none';
+	//let all = getArray();
+	//let tab = all[0];
+	/*tab = [
+		["V.B",  "x1" , "x2" , "e1", "e3", "e4", "a2",  "a4",  "b",    "ratio"],
+		["e1",   10,     5,     1,     0,     0,    0,    0,    200,      undefined ],
+		["a2",   2,      3,     0,     0,     0 ,   1,    0,    60,      undefined  ],
+		["e3",   1,      0,     0,     1,     0,    0,    0,    12,      undefined ],
+		["a4",   0,      1,     0,     0,     -1,   0,    1,    6,      undefined ],
+		["cout", 0,      0,     0,     0,     0,    1,    1,     0,       undefined ]
+	];*/
+	tab = [
+		["V.B",  "x1" , "x2" , "x3", "x4", "e1", "e2",  "e3",  "b",    "ratio"],
+		["e1",   0.25,     -60,     -0.04,     9,     1,    0,    0,    0,      undefined ],
+		["e2",   0.5,      -90,     -0.02,     3,     0 ,   1,    0,    0,      undefined  ],
+		["e3",   0,      0,     1,     0,     0,    0,    1,    1,      undefined ],
+		["cout", 0.75,      -150,     0.02,     -6,     0,    0,    0,     0,       undefined ]
+	];
+	let tab_init = tab;
+	let width = 10;//all[1]//n
+	let height = 5;//all[2];
+	let is_phase = 0;//all[3];
 	let choix = 'min';
 
 	if(is_phase != 0)
@@ -220,7 +237,11 @@ function simplex()
 		correction(tab,width,height);
 		while(check_negative(tab, height, width))
 		{
-
+			if (is_equal(tab, tab_init, width - 1, height)) {
+				console.log('Il y a cyclage');
+				alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
+				return ;
+			}
 			var point =  pivot(tab, width ,height, choix);
 			if(check_infinie(tab, width, height))
 			{
@@ -236,7 +257,6 @@ function simplex()
 			alert('probleme non bornee');
 			return ;
 		}
-		
 		for (let j = 1; j < width - 1; j++) {
 			if (tab[0][j][0] === 'x')
 				tab[height - 1][j] = toFloat(document.getElementById('x' + j.toString()).value);
@@ -251,11 +271,16 @@ function simplex()
 	}
 	let e = document.getElementById("fct_obj");
 	choix = e.options[e.selectedIndex].value;
+	tab_init = tab;
+	let init = 0;
 	while(check_pos_neg(tab, height, width, choix))
 	{
-
+		if (++init > 15 || is_equal(tab, tab_init, width - 1, height)) {
+			console.log('Il y a cyclage');
+			alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
+			return ;
+		}
 		var point =  pivot(tab, width ,height, choix);
-
 		if(check_infinie(tab,width,height))
 		{
 			alert("probleme non bornee")

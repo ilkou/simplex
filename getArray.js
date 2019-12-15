@@ -1,5 +1,4 @@
 function getArray() {
-	document.getElementById('array').style.display = 'none';
 	num_vars = parseInt(num_vars);
 	num_conts = parseInt(num_conts);
 	let width = 3 + num_vars;
