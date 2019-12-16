@@ -113,6 +113,6 @@ function getArray() {
 		}
 		tab[height - 1][width - 1] = "";
 	}
-	printArray(tab, width, height);
+	//printArray(tab, width, height);
 	return [tab, width, height, is_phase1];
 }

@@ -12,18 +12,31 @@ function get_column(tab, width, height, index)
 	}
 	return (col);
 }
-function cout_index_max(tab1d, taille)
+function is_base(tab, width, height, elm)
+{
+	console.log()
+	for (let i = 1; i < height - 1; i++){
+		if (tab[i][0] === elm)
+			return (true);
+	}
+	return (false);
+}
+function cout_index_max(tab, tab1d, taille, width, height)
 {
 	var max_index = 1;
 
 	for(var i = 1; i < taille - 2; i++)  {
-		if (parseFloat(tab1d[max_index]) < parseFloat(tab1d[i]))
-			max_index = i;
+		if (parseFloat(tab1d[max_index]) < parseFloat(tab1d[i])) {
+			if (width == taille && !is_base(tab, width, height, tab[0][i]))
+				max_index = max_index;
+			else
+				max_index = i;
+		}
 	}
 	return (max_index);
 }
 
-function cout_index_min(tab1d, taille)
+function cout_index_min(tab, tab1d, taille, width, height)
 {
 	var min_index = 1;
 
@@ -40,11 +53,11 @@ function pivot(tab, n, m, choix)
 	var col;
 
 	if(choix == 'max')
-		point[1] = cout_index_max(tab[m - 1], n);
+		point[1] = cout_index_max(tab, tab[m - 1], n, n, m);
 	if(choix == 'min')
-		point[1] = cout_index_min(tab[m - 1], n);
+		point[1] = cout_index_min(tab, tab[m - 1], n, n, m);
 	col = get_column(tab, n, m ,point[1]);
-	point[0] = cout_index_min(col,  m);
+	point[0] = cout_index_min(tab, col, m, n, m);
 	return (point);
 }
 
@@ -227,13 +240,25 @@ function simplex()
 		["e4" ,   0   ,     0,    1,     0,     0,     0,    0,      1,     , undefined ],
 		["cout",  0.75,   -150, 0.02,   -6,     0,     0,    0,      0,     ,  undefined ]
 	];*/
-	let all = getArray();
+	tab = [
+		["V.B",	'x1',	"x2",	'x3',	'x4',	'x5',	'x6',	'a1',	'a2',	'a3',	'b',	'ratio'],
+		['a1',	6.00,	-2.00,	1.00,	-1.00,	1.00,	2.00,	1.00,	0.00,	0.00,	4.00,	undefined],
+		['a2',	2.00,	-0.33,	-1.00,	1.00,	0.50,	0.00,	0.00,	1.00,	0.00,	3.00,	undefined],
+		['a3',	3.00,	-1.00,	2.00,	4.00,	0.50,	1.00,	0.00,	0.00,	1.00,	2.00,	undefined],
+		['cout',	0.00,	0.00,	0.00,	0.00,	0.00,	0.00,	1.00,	1.00,	1.00,	0.0,	undefined]
+		];
+	/*let all = getArray();
 	let tab = all[0];
 	let tab_init = tab;
 	let init = 0;
 	let width = all[1];
 	let height = all[2];
-	let is_phase = all[3];
+	let is_phase = all[3];*/
+	let tab_init = tab;
+	let init = 0;
+	let width = 12;
+	let height = 5;
+	let is_phase = 3;
 	let choix = 'min';
 
 	printArray(tab, width, height);
