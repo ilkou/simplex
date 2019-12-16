@@ -18,10 +18,16 @@ function toFloat(num) {
 }
 function is_equal(tab1, tab2, width, height)
 {
-	for (let i = 1; i < height; i++) {
-		for (let j = 1; j < width; j++) {
-			if (tab1[i][j] == tab2[i][j])
+	for (let i = 0; i < height; i++) {
+		for (let j = 0; j < width; j++) {
+			if (i != 0 && j != 0 && parseFloat(tab1[i][j]).toFixed(2).toString() != parseFloat(tab2[i][j]).toFixed(2).toString()) {
+				console.log(tab1[i][j].toString() + '    ' + tab2[i][j].toString());
 				return (false);
+			}
+			else if (i == 0 && j == 0 && tab1[i][j].toString() != tab2[i][j].toString()) {
+				console.log(tab1[i][j].toString() + '    ' + tab2[i][j].toString());
+				return (false);
+			}
 		}
 	}
 	return (true);

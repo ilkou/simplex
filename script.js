@@ -2,11 +2,10 @@ function get_column(tab, width, height, index)
 {
 	var col  = new Array(height);
 
-	for (var i = 1; i < height - 1; i++)
-	{
+	for (var i = 1; i < height - 1; i++) {
 		col[i] = tab[i][width - 2] / tab[i][index];
 		tab[i][width - 1] =  tab[i][width - 2] / tab[i][index];
-		if(col[i] < 0) {
+		if(col[i] < 0 || tab[i][index] <= 0) {
 			col[i] = Infinity;
 			tab[i][width - 1] = Infinity;
 		}
@@ -17,10 +16,8 @@ function cout_index_max(tab1d, taille)
 {
 	var max_index = 1;
 
-
-	for(var i = 1; i < taille - 2; i++)
-	{
-		if (tab1d[max_index] < tab1d[i])
+	for(var i = 1; i < taille - 2; i++)  {
+		if (parseFloat(tab1d[max_index]) < parseFloat(tab1d[i]))
 			max_index = i;
 	}
 	return (max_index);
@@ -30,9 +27,8 @@ function cout_index_min(tab1d, taille)
 {
 	var min_index = 1;
 
-	for(var i = 1; i < taille - 1; i++)
-	{
-		if (tab1d[min_index] > tab1d[i])
+	for(var i = 1; i < taille - 1; i++) {
+		if (parseFloat(tab1d[min_index]) > parseFloat(tab1d[i]))
 			min_index = i;
 	}
 	return (min_index);
@@ -200,7 +196,6 @@ function check_infinie(tab, width, height)
 {
 	for(let i = 1; i < height - 1; i++)
 	{
-		console.log(tab[i][width - 1]);
 		if(tab[i][width - 1] != Infinity)
 			return (false);
 	}
@@ -209,8 +204,6 @@ function check_infinie(tab, width, height)
 function simplex()
 {
 	document.getElementById('array').style.display = 'none';
-	//let all = getArray();
-	//let tab = all[0];
 	/*tab = [
 		["V.B",  "x1" , "x2" , "e1", "e3", "e4", "a2",  "a4",  "b",    "ratio"],
 		["e1",   10,     5,     1,     0,     0,    0,    0,    200,      undefined ],
@@ -219,17 +212,27 @@ function simplex()
 		["a4",   0,      1,     0,     0,     -1,   0,    1,    6,      undefined ],
 		["cout", 0,      0,     0,     0,     0,    1,    1,     0,       undefined ]
 	];*/
-	tab = [
+	/*tab = [
 		["V.B",  "x1" , "x2" , "x3", "x4", "e1", "e2",  "e3",  "b",    "ratio"],
 		["e1",   0.25,     -60,     -0.04,     9,     1,    0,    0,    0,      undefined ],
 		["e2",   0.5,      -90,     -0.02,     3,     0 ,   1,    0,    0,      undefined  ],
 		["e3",   0,      0,     1,     0,     0,    0,    1,    1,      undefined ],
 		["cout", 0.75,      -150,     0.02,     -6,     0,    0,    0,     0,       undefined ]
-	];
+	];*/
+	/*tab = [
+		["V.B",  "x1" , "x2" , "x3",  "x4",  "e1",  "e2",  "e3",  "e4",  "b",    "ratio"],
+		["e1" ,   0.25,   -60,-0.04,     9,     1,     0,    0,      0,     , undefined ],
+		["e2" ,   0.5 ,   -90,-0.02,     3,     0,     1,    0,      0,     , undefined  ],
+		["e3" ,   0   ,     0,    1,     0,     0,     0,    1,      0,     , undefined ],
+		["e4" ,   0   ,     0,    1,     0,     0,     0,    0,      1,     , undefined ],
+		["cout",  0.75,   -150, 0.02,   -6,     0,     0,    0,      0,     ,  undefined ]
+	];*/
+	let all = getArray();
+	let tab = all[0];
 	let tab_init = tab;
-	let width = 10;//all[1]//n
-	let height = 5;//all[2];
-	let is_phase = 0;//all[3];
+	let width = all[1];
+	let height = all[2];
+	let is_phase = all[3];
 	let choix = 'min';
 
 	if(is_phase != 0)
@@ -237,11 +240,11 @@ function simplex()
 		correction(tab,width,height);
 		while(check_negative(tab, height, width))
 		{
-			if (is_equal(tab, tab_init, width - 1, height)) {
+			/*if (is_equal(tab, tab_init, width - 1, height)) {
 				console.log('Il y a cyclage');
 				alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
 				return ;
-			}
+			}*/
 			var point =  pivot(tab, width ,height, choix);
 			if(check_infinie(tab, width, height))
 			{
@@ -275,11 +278,11 @@ function simplex()
 	let init = 0;
 	while(check_pos_neg(tab, height, width, choix))
 	{
-		if (++init > 15 || is_equal(tab, tab_init, width - 1, height)) {
+		/*if (++init > 1 && is_equal(tab, tab_init, width - 1, height)) {
 			console.log('Il y a cyclage');
 			alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
 			return ;
-		}
+		}*/
 		var point =  pivot(tab, width ,height, choix);
 		if(check_infinie(tab,width,height))
 		{
