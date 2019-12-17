@@ -48,7 +48,23 @@ function pivot(tab, n, m, choix)
 	return (point);
 }
 
-function gauss(tab,m , n, x , y,choix)
+function cout(tab, width, height, phase_1)
+{
+	let cout = 0.0;
+	for (let i = 1; i < height - 1; i++) {
+		if (tab[i][0][0] == 'a')
+			cout += toFloat(tab[i][width - 2]);
+	}
+	if (phase_1 == 1)
+		return (cout);
+	for (let i = 1; i < height - 1; i++) {
+		if (tab[i][0][0] == 'x')
+			cout += toFloat(tab[i][width - 2]) * toFloat(document.getElementById(tab[i][0]).value);
+	}
+	return (cout);
+}
+
+function gauss(tab,m , n, x , y,choix, phase_1)
 {
 	var new_tab = new Array(m);
 
@@ -78,21 +94,21 @@ function gauss(tab,m , n, x , y,choix)
 					new_tab[i][j] = tab[i][j] / tab[x][y];
 				else
 				{
-					if(i == m - 1 && j == n - 2)
-					{
-						if(choix == "min")
-							new_tab[i][j] = (Math.abs(tab[i][j] * tab[x][y]) - Math.abs(tab[i][y] * tab[x][j])) / tab[x][y];
-						else
-						new_tab[i][j] = (Math.abs(tab[i][j] * tab[x][y]) + Math.abs(tab[i][y] * tab[x][j])) / tab[x][y];
-					}
+					if (!(i == m - 1 && j == n - 2))
+						new_tab[i][j] = (tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y];
 					else
 					{
-						new_tab[i][j] = (tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y];
+						//if(choix == "min")
+						//	new_tab[i][j] = (Math.abs(tab[i][j] * tab[x][y]) - Math.abs(tab[i][y] * tab[x][j])) / tab[x][y];
+						//else
+						//new_tab[i][j] = (Math.abs(tab[i][j] * tab[x][y]) + Math.abs(tab[i][y] * tab[x][j])) / tab[x][y];
+						//new_tab[i][j] = cout(new_tab, n, m);
 					}
 				}
 			}
 		}
 	}
+	new_tab[m - 1][n - 2] = cout(new_tab, n, m, phase_1);
 	return(new_tab);
 }
 
@@ -253,7 +269,7 @@ function simplex()
 				alert("probleme non bornee : b -> infinie - phase1");
 				return;
 			}
-			tab = gauss(tab,height , width, point[0], point[1], choix);
+			tab = gauss(tab,height , width, point[0], point[1], choix, 1);
 			printArray(tab, width, height);
 		}
 		tab = phas1_to_2(tab, width, height);
@@ -291,7 +307,7 @@ function simplex()
 			alert("probleme non bornee : b -> infinie");
 			return;
 		}
-		tab = gauss(tab,height , width, point[0], point[1], choix);
+		tab = gauss(tab,height , width, point[0], point[1], choix, 0);
 		printArray(tab, width, height);
 	}
 }
