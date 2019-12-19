@@ -27,7 +27,7 @@ function cout_index_min(tab1d, taille)
 {
 	var min_index = 1;
 
-	for(var i = 1; i < taille - 1; i++) {
+	for(var i = 1; i < taille; i++) {
 		if (parseFloat(tab1d[min_index]) > parseFloat(tab1d[i]))
 			min_index = i;
 	}
@@ -42,9 +42,9 @@ function pivot(tab, n, m, choix)
 	if(choix == 'max')
 		point[1] = cout_index_max(tab[m - 1], n);
 	if(choix == 'min')
-		point[1] = cout_index_min(tab[m - 1], n);
+		point[1] = cout_index_min(tab[m - 1], n - 2);
 	col = get_column(tab, n, m ,point[1]);
-	point[0] = cout_index_min(col,  m);
+	point[0] = cout_index_min(col,  m - 1);
 	return (point);
 }
 
@@ -271,6 +271,7 @@ function simplex()
 			}
 			tab = gauss(tab,height , width, point[0], point[1], choix, 1);
 			printArray(tab, width, height);
+			console.log('hahiya ' + tab[4][5].toString());
 		}
 		tab = phas1_to_2(tab, width, height);
 		width -= is_phase;

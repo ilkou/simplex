@@ -69,9 +69,9 @@ function getArray() {
 			let b = toFloat(document.getElementById('b' + i.toString()).value);
 			let x = document.getElementById('coef[' + i.toString() + '][' + j.toString() + ']');
 			if (b < 0.0)
-				tab[i][j] = (-1) * toFloat(x.value);
+				tab[i][j] = (-1) * toFloat(eval(x.value));
 			else
-				tab[i][j] = toFloat(x.value);
+				tab[i][j] = toFloat(eval(x.value));
 		}
 		console.log('<br />');
 	}
