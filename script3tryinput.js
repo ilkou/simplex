@@ -1,4 +1,5 @@
-function get_column(tab, width, height, index) {
+function get_column(tab, width, height, index)
+{
 	var col  = new Array(height);
 
 	for (var i = 1; i < height - 1; i++) {
@@ -11,7 +12,8 @@ function get_column(tab, width, height, index) {
 	}
 	return (col);
 }
-function cout_index_max(tab1d, taille) {
+function cout_index_max(tab1d, taille)
+{
 	var max_index = 1;
 
 	for(var i = 1; i < taille - 2; i++)  {
@@ -21,7 +23,8 @@ function cout_index_max(tab1d, taille) {
 	return (max_index);
 }
 
-function cout_index_min(tab1d, taille) {
+function cout_index_min(tab1d, taille)
+{
 	var min_index = 1;
 
 	for(var i = 1; i < taille; i++) {
@@ -30,15 +33,14 @@ function cout_index_min(tab1d, taille) {
 	}
 	return (min_index);
 }
-function getRndInteger(min, max) {
-	return Math.floor(Math.random() * (max - min) ) + min;
-}
-function pivot(tab, n, m, choix) {
+
+function pivot(tab, n, m, choix)
+{
 	var point = new Array(2);
 	var col;
 
 	if(choix == 'max')
-		point[1] = getRndInteger(1, 4);//cout_index_max(tab[m - 1], n);
+		point[1] = cout_index_max(tab[m - 1], n);
 	if(choix == 'min')
 		point[1] = cout_index_min(tab[m - 1], n - 2);
 	col = get_column(tab, n, m ,point[1]);
@@ -46,7 +48,8 @@ function pivot(tab, n, m, choix) {
 	return (point);
 }
 
-function cout(tab, width, height, phase_1) {
+function cout(tab, width, height, phase_1)
+{
 	let cout = 0.0;
 	for (let i = 1; i < height - 1; i++) {
 		if (tab[i][0][0] == 'a')
@@ -61,8 +64,10 @@ function cout(tab, width, height, phase_1) {
 	return (cout);
 }
 
-function gauss(tab, m, n, x, y, choix, phase_1) {
+function gauss(tab,m , n, x , y,choix, phase_1)
+{
 	var new_tab = new Array(m);
+
 	for(var i = 0; i < m; i++)
 	{
 		new_tab[i] = new Array(n);
@@ -73,21 +78,36 @@ function gauss(tab, m, n, x, y, choix, phase_1) {
 		new_tab[0][i] = tab[0][i];
 	}
 	new_tab[x][0] = tab[0][y];
-	for(var i = 1; i < m; i++) {
-		for(var j = 1; j < n - 1; j++) {
-			if (j == y) {
-				if (i == x)
+	for(var i = 1; i < m; i++)
+	{
+		for(var j = 1; j < n - 1; j++)
+		{
+			if(j == y)
+			{   
+				if(i == x)
 					new_tab[i][j] = 1;
 				else
 					new_tab[i][j] = 0;
-			} else {
-				if (i == x)
+			}
+			else{
+				if( i == x)
 					new_tab[i][j] = tab[i][j] / tab[x][y];
-				else if (!(i == m - 1 && j == n - 2)) {
-					if (tab[i][j] == -tab[x][j] && tab[x][y] == -tab[i][y])
-						new_tab[i][j] = 0.0;
+				else
+				{
+					if (!(i == m - 1 && j == n - 2)) {
+						if (tab[i][j] == -tab[x][j] && tab[x][y] == -tab[i][y])
+							new_tab[i][j] = 0.0;
+						else
+							new_tab[i][j] = (tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y];
+					}
 					else
-						new_tab[i][j] = (tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y];
+					{
+						//if(choix == "min")
+						//	new_tab[i][j] = (Math.abs(tab[i][j] * tab[x][y]) - Math.abs(tab[i][y] * tab[x][j])) / tab[x][y];
+						//else
+						//new_tab[i][j] = (Math.abs(tab[i][j] * tab[x][y]) + Math.abs(tab[i][y] * tab[x][j])) / tab[x][y];
+						//new_tab[i][j] = cout(new_tab, n, m);
+					}
 				}
 			}
 		}
@@ -96,9 +116,10 @@ function gauss(tab, m, n, x, y, choix, phase_1) {
 	return(new_tab);
 }
 
-function check_positive(tab, m, width)
+function check_posive(tab, m, width)
 {
-	for(var i = 1; i < width - 2; i++) {
+	for(var i = 1; i < width - 2; i++)
+	{
 		if (tab[m - 1][i] > 0)
 			return (true);
 	}
@@ -159,7 +180,7 @@ function correction(tab, width, height)
 function check_pos_neg(tab, m, n, choix)
 {
 	if(choix == 'max')
-		return(check_positive(tab, m, n));
+		return(check_posive(tab, m, n));
 	return(check_negative(tab, m, n));
 }
 
@@ -200,6 +221,32 @@ function check_infinie(tab, width, height)
 	}
 	return (true);
 }
+/*var clicked = false;
+function clearPivot() {
+	let container = document.getElementById('table');
+	let dev = document.getElementById('dev_id');
+	container.removeChild(dev);
+	clicked = true;
+}
+
+function setPivotInput() {
+	let container = document.getElementById('table');
+	let dev = document.createElement('form');
+	dev.setAttribute('id', 'dev_id');
+	let input1 = document.createElement('input');
+	input1.setAttribute('id', 'input1');
+	dev.appendChild(input1);
+	let input2 = document.createElement('input');
+	input2.setAttribute('id', 'input2');
+	dev.appendChild(input2);
+	let submit = document.createElement('input');
+	setAttributes(submit, {'type':'button', 'value':'Prochain pas →', 'id': 'pivot_submit', 'onclick': 'clearPivot()', 'style': "margin-top: 15px; float: right"})
+	dev.appendChild(submit);
+	container.appendChild(dev);
+}
+async function demo() {
+	await new Promise(r => setTimeout(r, 2000));
+}*/
 function simplex()
 {
 	document.getElementById('array').style.display = 'none';
@@ -246,18 +293,25 @@ function simplex()
 				alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
 				return ;
 			}
+			/*setPivotInput();
+			console.log('hahwa dkhel');
+			console.log(document.getElementById('pivot_submit').submit);
+			while (!document.getElementById('pivot_submit').submit);
+			clicked = false;
+			console.log('hahwa khrej');
 
-			/*var point =  pivot(tab, width ,height, choix);
-
+			let point = new Array(2);
+			demo();
+			point[0] = document.getElementById('input1').value;
+			point[1] = document.getElementById('input2').value;*/
+			var point =  pivot(tab, width ,height, choix);
 			if(check_infinie(tab, width, height)) {
 				alert("probleme non bornee : b -> infinie - phase1");
 				return;
 			}
-
-			tab = gauss(tab,height , width, point[0], point[1], choix, 1);*/
-
-
+			tab = gauss(tab,height , width, point[0], point[1], choix, 1);
 			printArray(tab, width, height);
+			console.log('hahiya ' + tab[4][5].toString());
 		}
 		tab = phas1_to_2(tab, width, height);
 		width -= is_phase;

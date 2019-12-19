@@ -7,5 +7,5 @@ function setArray() {
 	createContraintes(container, num_vars, num_conts);
 	let input = document.createElement('input');
 	setAttributes(input, {'type':'button', 'value':'Prochain pas →', 'onclick': 'simplex()', 'style': "margin-top: 15px; float: right"})
-		container.appendChild(input);
+	container.appendChild(input);
 }

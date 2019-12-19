@@ -88,7 +88,7 @@ function getArray() {
 	}
 	/*coef du b/ratio :*/
 	for (let i = 1; i < height - 1; i++) {
-		tab[i][width - 2] = toFloat(document.getElementById('b' + i.toString()).value);
+		tab[i][width - 2] = toFloat(eval(document.getElementById('b' + i.toString()).value));
 		if (tab[i][width - 2] < 0.0)
 			tab[i][width - 2] = -tab[i][width - 2];
 		tab[i][width - 1] = "";
@@ -107,7 +107,7 @@ function getArray() {
 	else {
 		for (let j = 1; j < width - 1; j++) {
 			if (tab[0][j][0] === 'x')
-				tab[height - 1][j] = toFloat(document.getElementById('x' + j.toString()).value);
+				tab[height - 1][j] = toFloat(eval(document.getElementById('x' + j.toString()).value));
 			else
 				tab[height - 1][j] = parseFloat('0');
 		}
