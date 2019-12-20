@@ -1,17 +1,18 @@
-function printArray(tab, width, height)
+function printArray(tab, width, height, px, py)
 {
 	let container = document.getElementById('table');
 	let table = document.createElement('table');
-	setAttributes(table, {'border': 1, 'cellspacing': 2, 'cellpadding': 1});
+	setAttributes(table, {'class':'ilk-table', 'border': 1, 'cellspacing': 2, 'cellpadding': 1, 'style': 'margin: 0 auto;'});
 	for (let i = 0; i < height ; i++) {
 		let tr = document.createElement('tr');
-		for (let j = 0; j < width; j++) {
-			let td = document.createElement(i == 0 || j == 0 ? 'th' : 'td');
-			setAttributes(td, {'style': 'width: 10%; text-align:center'});
+		for (let j = 0; j < width - 1; j++) {
+			let td = document.createElement(i === 0 || j === 0 ? 'th' : 'td');
+			if (i === px || j === py)
+				setAttributes(td, {'class': 'iam_pivot'});
 			let x = tab[i][j];
 			if (x == null)
 				td.appendChild(document.createTextNode("-"));
-			else if (i != 0 && j != 0)
+			else if (i !== 0 && j !== 0)
 				td.appendChild(document.createTextNode(parseFloat(x).toFixed(2).toString()));
 			else
 				td.appendChild(document.createTextNode(x.toString()));

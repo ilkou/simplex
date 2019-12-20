@@ -104,7 +104,7 @@ function gauss(tab, m, n, x, y, choix, phase_1) {
 					if (tab[i][j] == -tab[x][j] && tab[x][y] == -tab[i][y])
 						new_tab[i][j] = 0.0;
 					else
-						new_tab[i][j] = (tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y];
+						new_tab[i][j] = ((tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y]).toFixed(10);;
 				}
 			}
 		}
@@ -169,7 +169,6 @@ function correction(tab, width, height)
 	}
 
 	tab[height - 1][width - 2]  = Math.abs(tab[height - 1][width - 2]);
-	printArray(tab, width, height);
 }
 
 
@@ -191,13 +190,13 @@ function phas1_to_2(tab, n, m)
 	}
 	for(var i = 0; i < m; i++)
 	{
-		if(!(tab[i][0].includes("a")))
+		if(!(tab[i][0][0] === "a"))
 		{
 			y = 0;
 			for(var j = 0; j < n; j++)
 			{
 
-				if(!(tab[0][j].includes("a")))
+				if(!(tab[0][j][0] === "a"))
 				{
 					new_tab[x][y] = tab[i][j];
 					y++;
@@ -258,7 +257,7 @@ function simplex()
 	let choix = 'min';
 	let bland = false;
 
-	printArray(tab, width, height);
+	printArray(tab, width, height, -1, -1);
 	if(is_phase != 0) {
 		correction(tab,width,height);
 		while(check_negative(tab, height, width)) {
@@ -273,15 +272,14 @@ function simplex()
 				alert("probleme non bornee : b -> infinie - phase1");
 				return;
 			}
+			printArray(tab, width, height, point[0], point[1]);
 
 			tab = gauss(tab,height , width, point[0], point[1], choix, 1);
-
-			printArray(tab, width, height);
 		}
 		tab = phas1_to_2(tab, width, height);
 		width -= is_phase;
 		if(parseFloat(tab[height - 1][width - 2]).toFixed(2).toString() != "0.00") {
-			alert('probleme non bornee : Z != 0');
+			alert("Z != 0 => l'ensemble vide");
 			return ;
 		}
 		for (let j = 1; j < width - 1; j++) {
@@ -291,9 +289,9 @@ function simplex()
 				tab[height - 1][j] = parseFloat('0');
 		}
 		tab[height - 1][width - 1] = "";
-		printArray(tab, width, height);
+		printArray(tab, width, height, -1, -1);
 		correction(tab, width, height);
-		printArray(tab, width, height);
+		printArray(tab, width, height, -1, -1);
 		
 	}
 	let e = document.getElementById("fct_obj");
@@ -307,13 +305,14 @@ function simplex()
 			alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
 			bland = true;
 		}
-		var point = pivot(tab, width ,height, choix, bland);
+		let point = pivot(tab, width ,height, choix, bland);
 		if(check_infinie(tab,width,height)) {
 			alert("probleme non bornee : b -> infinie");
 			return;
 		}
+		printArray(tab, width, height, point[0], point[1]);
 		tab = gauss(tab,height , width, point[0], point[1], choix, 0);
-		printArray(tab, width, height);
 	}
+	printArray(tab, width, height, -1, -1);
 }
 

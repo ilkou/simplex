@@ -1,25 +1,37 @@
+function fixContraintes(){
+	for (let k = 1; k <= num_conts; k++) {
+		let b = toFloat(document.getElementById('b' + k.toString()).value);
+		let operator = document.getElementById("operator" + k.toString());
+		if (b < 0.0) {
+			if (operator.value === '>')
+				operator.value = '<';
+			else if (operator.value === '<')
+				operator.value = '>';
+		}
+	}
+	for (let j = 1; j <= num_vars; j++) {
+		for (let i = 1; i <= num_conts; i++) {
+			let b = toFloat(document.getElementById('b' + i.toString()).value);
+			let x = document.getElementById('coef[' + i.toString() + '][' + j.toString() + ']');
+			if (b < 0.0)
+				x.value = (-1) * toFloat(eval(x.value));
+		}
+	}
+}
+
 function getArray() {
 	num_vars = parseInt(num_vars);
 	num_conts = parseInt(num_conts);
 	let width = 3 + num_vars;
 	let height = 2 + num_conts;
-	let e = document.getElementById("fct_obj");
-	let fct_obj = e.options[e.selectedIndex].value;
-	console.log('il s\'agit de ' + fct_obj);
+	fixContraintes();
 	for (let k = 1; k <= num_conts; k++) {
-		let b = toFloat(document.getElementById('b' + k.toString()).value);
 		let operator = document.getElementById("operator" + k.toString()).value;
-		if (b < 0.0) {
-			if (operator === '>')
-				operator = '<';
-			else if (operator === '<')
-				operator = '>';
-		}
 		width += 1;
 		if (operator === ">")
 			width += 1;
 	}
-	console.log('width ' + width.toString() + ' height ' + height.toString());
+	/*construction du tableau:*/
 	let tab = new Array(height);
 	for (let i = 0; i < height; i++)  {
 		tab[i] = new Array(width);
@@ -29,14 +41,7 @@ function getArray() {
 	let vars = new Array();
 	let is_phase1 = 0;
 	for (let j = 1; j < height - 1; j++) {
-		let b = toFloat(document.getElementById('b' + j.toString()).value);
 		let operator = document.getElementById("operator" + j.toString()).value;
-		if (b < 0.0) {
-			if (operator === '>')
-				operator = '<';
-			else if (operator === '<')
-				operator = '>';
-		}
 		if (operator === '<')
 			tab[j][0] = 'e' + j.toString();
 		else {
@@ -66,14 +71,9 @@ function getArray() {
 	/*coef du variables :*/
 	for (let j = 1; j <= num_vars; j++) {
 		for (let i = 1; i <= num_conts; i++) {
-			let b = toFloat(document.getElementById('b' + i.toString()).value);
 			let x = document.getElementById('coef[' + i.toString() + '][' + j.toString() + ']');
-			if (b < 0.0)
-				tab[i][j] = (-1) * toFloat(eval(x.value));
-			else
 				tab[i][j] = toFloat(eval(x.value));
 		}
-		console.log('<br />');
 	}
 	/*coef du e/a :*/
 	for (let j = num_vars + 1; j < width - 2; j++) {
@@ -113,6 +113,5 @@ function getArray() {
 		}
 		tab[height - 1][width - 1] = "";
 	}
-	//printArray(tab, width, height);
 	return [tab, width, height, is_phase1];
 }

@@ -31,7 +31,7 @@ function createObjFunction(container, num_vars){
 	for (let i = 1; i <= num_vars; i++) {
 		let td = document.createElement('td');
 		let input = document.createElement('input');
-		setAttributes(input, {'type': 'text', 'size': '4', 'id': 'x' + i.toString()})
+		setAttributes(input, {'type': 'text','placeholder': '0', 'size': '4', 'id': 'x' + i.toString()})
 			setAttributes(td, {'align': 'center'});
 		td.appendChild(input);
 		tr.appendChild(td);

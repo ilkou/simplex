@@ -29,7 +29,7 @@ function createContraintes(container, num_vars, num_conts) {
 		for (let j = 1; j <= num_vars; j++) {
 			let td = document.createElement('td');
 			let input = document.createElement('input');
-			setAttributes(input, {'type': 'text', 'size': '4', 'id': 'coef[' + i.toString() + '][' + j.toString() + ']'});
+			setAttributes(input, {'type': 'text', 'placeholder': '0', 'size': '4', 'id': 'coef[' + i.toString() + '][' + j.toString() + ']'});
 			setAttributes(td, {'align': 'center'});
 			td.appendChild(input);
 			tr.appendChild(td);
@@ -54,7 +54,7 @@ function createContraintes(container, num_vars, num_conts) {
 		tr.appendChild(td);
 		td = document.createElement('td');
 		let input = document.createElement('input');
-		setAttributes(input, {'type': 'text', 'size': '3', 'id': 'b' + i.toString()});
+		setAttributes(input, {'type': 'text', 'placeholder': '0', 'style':'border: 1px solid #999999;', 'size': '5', 'id': 'b' + i.toString()});
 		setAttributes(td, {'align': 'center'});
 		td.appendChild(input);
 		tr.appendChild(td);
