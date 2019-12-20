@@ -32,3 +32,6 @@ function is_equal(tab1, tab2, width, height)
 	}
 	return (true);
 }
+function getRndInteger(min, max) {
+	return Math.floor(Math.random() * (max - min) ) + min;
+}

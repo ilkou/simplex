@@ -21,6 +21,20 @@ function cout_index_max(tab1d, taille) {
 	return (max_index);
 }
 
+function cout_index_min_bland(tab1d, taille) {
+	for (var i = 1; i < taille; i++) {
+		if (parseFloat(tab1d[i]) < 0.0)
+			return (i);
+	}
+	return (1);
+}
+function column_index_min_bland(tab1d, taille) {
+	for(var i = 1; i < taille; i++) {
+		if (tab1d[i] != Infinity)
+			return (i);
+	}
+	return (1);
+}
 function cout_index_min(tab1d, taille) {
 	var min_index = 1;
 
@@ -30,51 +44,54 @@ function cout_index_min(tab1d, taille) {
 	}
 	return (min_index);
 }
-function getRndInteger(min, max) {
-	return Math.floor(Math.random() * (max - min) ) + min;
-}
-function pivot(tab, n, m, choix) {
-	var point = new Array(2);
-	var col;
+function pivot(tab, n, m, choix, bland) {
+	let point = new Array(2);
+	let col;
 
-	if(choix == 'max')
-		point[1] = getRndInteger(1, 4);//cout_index_max(tab[m - 1], n);
-	if(choix == 'min')
+	if(choix === 'max')
+		point[1] = cout_index_max(tab[m - 1], n);
+	else if(choix === 'min' && bland)
+		point[1] = cout_index_min_bland(tab[m - 1], n - 2);
+	else if(choix === 'min')
 		point[1] = cout_index_min(tab[m - 1], n - 2);
+
 	col = get_column(tab, n, m ,point[1]);
-	point[0] = cout_index_min(col,  m - 1);
+	if (bland)
+		point[0] = column_index_min_bland(col,  m - 1);
+	else
+		point[0] = cout_index_min(col,  m - 1);
 	return (point);
 }
 
 function cout(tab, width, height, phase_1) {
 	let cout = 0.0;
 	for (let i = 1; i < height - 1; i++) {
-		if (tab[i][0][0] == 'a')
+		if (tab[i][0][0] === 'a')
 			cout += toFloat(tab[i][width - 2]);
 	}
 	if (phase_1 == 1)
 		return (cout);
 	for (let i = 1; i < height - 1; i++) {
-		if (tab[i][0][0] == 'x')
+		if (tab[i][0][0] === 'x')
 			cout += toFloat(tab[i][width - 2]) * toFloat(document.getElementById(tab[i][0]).value);
 	}
 	return (cout);
 }
 
 function gauss(tab, m, n, x, y, choix, phase_1) {
-	var new_tab = new Array(m);
-	for(var i = 0; i < m; i++)
+	let new_tab = new Array(m);
+	for(let i = 0; i < m; i++)
 	{
 		new_tab[i] = new Array(n);
 		new_tab[i][0] = tab[i][0];
 	}
-	for(var i = 0 ; i < n; i++)
+	for(let i = 0 ; i < n; i++)
 	{
 		new_tab[0][i] = tab[0][i];
 	}
 	new_tab[x][0] = tab[0][y];
-	for(var i = 1; i < m; i++) {
-		for(var j = 1; j < n - 1; j++) {
+	for(let i = 1; i < m; i++) {
+		for(let j = 1; j < n - 1; j++) {
 			if (j == y) {
 				if (i == x)
 					new_tab[i][j] = 1;
@@ -200,6 +217,11 @@ function check_infinie(tab, width, height)
 	}
 	return (true);
 }
+function createEqui(choix) {
+	for (let x = 1; x <= num_vars; x++)
+		document.getElementById('x' + x.toString()).value *= -1.0;
+	return (choix === "min" ? "max" : "min");
+}
 function simplex()
 {
 	document.getElementById('array').style.display = 'none';
@@ -234,28 +256,25 @@ function simplex()
 	let height = all[2];
 	let is_phase = all[3];
 	let choix = 'min';
+	let bland = false;
 
 	printArray(tab, width, height);
-	if(is_phase != 0)
-	{
+	if(is_phase != 0) {
 		correction(tab,width,height);
-		while(check_negative(tab, height, width))
-		{
+		while(check_negative(tab, height, width)) {
 			if (++init > 1 && is_equal(tab, tab_init, width - 1, height)) {
 				console.log('Il y a cyclage');
-				alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
-				return ;
+				//alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
+				bland = true;
 			}
-
-			/*var point =  pivot(tab, width ,height, choix);
+			var point =  pivot(tab, width ,height, choix, bland);
 
 			if(check_infinie(tab, width, height)) {
 				alert("probleme non bornee : b -> infinie - phase1");
 				return;
 			}
 
-			tab = gauss(tab,height , width, point[0], point[1], choix, 1);*/
-
+			tab = gauss(tab,height , width, point[0], point[1], choix, 1);
 
 			printArray(tab, width, height);
 		}
@@ -281,16 +300,15 @@ function simplex()
 	choix = e.options[e.selectedIndex].value;
 	tab_init = tab;
 	init = 0;
-	while(check_pos_neg(tab, height, width, choix))
-	{
+	bland = false;
+	while(check_pos_neg(tab, height, width, choix)) {
 		if (++init > 1 && is_equal(tab, tab_init, width - 1, height)) {
 			console.log('Il y a cyclage');
 			alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
-			return ;
+			bland = true;
 		}
-		var point = pivot(tab, width ,height, choix);
-		if(check_infinie(tab,width,height))
-		{
+		var point = pivot(tab, width ,height, choix, bland);
+		if(check_infinie(tab,width,height)) {
 			alert("probleme non bornee : b -> infinie");
 			return;
 		}
