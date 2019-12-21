@@ -37,7 +37,11 @@ body {
 #simpleh {
 	background-image: linear-gradient(to left bottom, #022022, #054b50, #067a85, #04adbf, #00e3fe);
 	border-radius: 20px;
+	box-shadow: 1px 1px 50px #022022;
 	color: white;
+	text-align: center;
+	padding-top: 200px;
+	padding-bottom: 1px;
 }
 .title {
 	letter-spacing: 2px;
@@ -74,4 +78,7 @@ footer p {
 .ilk-table:hover .iam_pivot {
 	background-color: #8cc7c7;
 	color: #37686d;
+}
+html, body {
+	background-repeat: round;
 }

@@ -13,13 +13,14 @@
         
     </head>
     <body>
+    <div id="simpleh" class="title"><h1>Méthode Simplexe</h1></div>
     <div class="center_widget" id="init">
         <table border="0" cellpadding="15px">
             <tr>
                 <td class="title">Nombre des variables :</td>
                 <td>
                     <input type="button" value="-" onclick="var_dec()" />
-                    <input type="text" value="1"  id="num_vars" size="7" style="text-align:right" />
+                    <input type="text" value="1" disabled="disabled" id="num_vars" size="7" style="text-align:right" />
                     <input type="button" value="+" onclick="var_inc()" />
                 </td>
             </tr>
@@ -27,7 +28,7 @@
                 <td class="title">Nombre des contraintes :</td>
                 <td>
                     <input type="button" value="-" onclick="cont_dec()" />
-                    <input type="text" value="1"  id="num_conts" size="7" style="text-align:right" />
+                    <input type="text" value="1" disabled="disabled" id="num_conts" size="7" style="text-align:right" />
                     <input type="button" value="+" onclick="cont_inc()" />
                 </td>
             </tr>
@@ -37,6 +38,9 @@
     </div>
     <div class="center_widget" id="array"></div>
     <div id="table"></div>
-
+    <footer id="rights">
+        <hr />
+        <p>© oouklich erahimi 2019</p>
+    </footer>
     </body>
 </html>
