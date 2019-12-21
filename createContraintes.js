@@ -1,6 +1,7 @@
 function createContraintes(container, num_vars, num_conts) {
-	let title = document.createElement('h1');
+	let title = document.createElement('h2');
 	title.innerHTML = 'Contraintes';
+	title.setAttribute('class', 'title');
 	container.appendChild(title);
 	let table = document.createElement('table');
 	setAttributes(table, {'border': 0, 'cellspacing': 2, 'cellpadding': 2});
@@ -29,7 +30,7 @@ function createContraintes(container, num_vars, num_conts) {
 		for (let j = 1; j <= num_vars; j++) {
 			let td = document.createElement('td');
 			let input = document.createElement('input');
-			setAttributes(input, {'type': 'text', 'placeholder': '0', 'size': '4', 'id': 'coef[' + i.toString() + '][' + j.toString() + ']'});
+			setAttributes(input, {'type': 'text', 'placeholder': '0', 'size': '5', 'id': 'coef[' + i.toString() + '][' + j.toString() + ']'});
 			setAttributes(td, {'align': 'center'});
 			td.appendChild(input);
 			tr.appendChild(td);

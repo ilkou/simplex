@@ -14,28 +14,29 @@
     </head>
     <body>
     <div class="center_widget" id="init">
-        <table border="5">
+        <table border="0" cellpadding="15px">
             <tr>
-                <td width ="250px">Nombre des variables :</td>
+                <td class="title">Nombre des variables :</td>
                 <td>
                     <input type="button" value="-" onclick="var_dec()" />
-                    <input  type="text" value="1" disabled="disabled" id="num_vars" size="7" style="text-align:right" />
+                    <input type="text" value="1"  id="num_vars" size="7" style="text-align:right" />
                     <input type="button" value="+" onclick="var_inc()" />
                 </td>
             </tr>
             <tr>
-                <td>Nombre des contraintes :</td>
+                <td class="title">Nombre des contraintes :</td>
                 <td>
                     <input type="button" value="-" onclick="cont_dec()" />
-                    <input type="text" value="1" disabled="disabled" id="num_conts" size="7" style="text-align:right" />
+                    <input type="text" value="1"  id="num_conts" size="7" style="text-align:right" />
                     <input type="button" value="+" onclick="cont_inc()" />
                 </td>
             </tr>
         </table>
-        <input type="button" value="Prochain pas &rarr;" onclick="setArray()" style="margin-top: 15px; float: right"/>
+        <input type="button" value="Prochain pas &rarr;" onclick="setArray()" class="nextstep"/>
         <script src="inc_dec.js"></script>
     </div>
     <div class="center_widget" id="array"></div>
     <div id="table"></div>
+
     </body>
 </html>

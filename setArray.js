@@ -45,12 +45,14 @@ function checkInput() {
 
 function setArray() {
 	document.getElementById('init').style.display = 'none';
+	//document.getElementById('rights').style.display = 'none';
+	//document.getElementById('simpleh').style.display = 'none';
 	let container = document.getElementById('array');
 	if (parseInt(num_vars) > 15 || parseInt(num_conts) > 15)
 		container.removeAttribute("class");
 	createObjFunction(container, num_vars);
 	createContraintes(container, num_vars, num_conts);
 	let input = document.createElement('input');
-	setAttributes(input, {'type':'button', 'value':'Prochain pas →', 'onclick': 'checkInput()', 'style': "margin-top: 15px; float: right"})
+	setAttributes(input, {'type':'button', 'value':'Prochain pas →', 'class':'nextstep', 'onclick': 'checkInput()', 'style': "margin-top: 15px; float: right"})
 	container.appendChild(input);
 }

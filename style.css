@@ -30,7 +30,45 @@
 	text-align:center;
 }
 body {
-	background-image: linear-gradient(to left bottom, #001a1c, #304a4c, #637f83, #9bbabd, #d6f8fc);	min-height: 100vh;
+	//background-image: url("bg.jpg");
+	background-image: linear-gradient(to left bottom, #022022, #054b50, #067a85, #04adbf, #00e3fe);
+	//background-image: linear-gradient(to left bottom, #001a1c, #304a4c, #637f83, #9bbabd, #d6f8fc);	min-height: 100vh;
+}
+#simpleh {
+	background-image: linear-gradient(to left bottom, #022022, #054b50, #067a85, #04adbf, #00e3fe);
+	border-radius: 20px;
+	color: white;
+}
+.title {
+	letter-spacing: 2px;
+	font-weight: bold;
+	color: #022022;
+	min-width: 220px
+}
+.nextstep {
+	color: white;
+	background-color: #022022;
+	margin-top: 15px;
+	float: right
+}
+input, select{
+	color: white;
+	border-radius: 5px;
+	background-color: #002729;
+}
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 99%;
+}
+
+footer p {
+	color: white;
+	text-align: right;
+	font-family: monospace, sans-serif;
+	font-style: italic;
+	font-size: 1.2vw;
+	margin: 0 2% 0 0;
 }
 
 .ilk-table:hover .iam_pivot {
