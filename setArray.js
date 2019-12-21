@@ -39,8 +39,18 @@ function checkInput() {
 			}
 		}
 	}
-	if (valid)
+	return (valid);
+}
+
+function checkInputSimplex() {
+	if (checkInput())
 		simplex();
+}
+function checkInputGraphic() {
+	if (num_vars != 2)
+		alert('les variables de décision doit etre egal a 2');
+	else if (checkInput())
+		graphic();
 }
 function clearInput() {
 	for (let i = 1; i <= num_vars; i++) {
@@ -73,7 +83,10 @@ function setArray() {
 	let clearInput = document.createElement('input');
 	setAttributes(clearInput, {'type':'button', 'value':'Clear', 'class':'nextstep', 'onclick': 'clearInput()', 'style': "margin-top: 15px; float: left"});
 	container.appendChild(clearInput);
-	let input = document.createElement('input');
-	setAttributes(input, {'type':'button', 'value':'Prochain pas →', 'class':'nextstep', 'onclick': 'checkInput()', 'style': "margin-top: 15px;"});
-	container.appendChild(input);
+	let tosimplex = document.createElement('input');
+	setAttributes(tosimplex, {'type':'button', 'value':'Simplex →', 'class':'nextstep', 'onclick': 'checkInputSimplex()', 'style': "margin-top: 15px;"});
+	container.appendChild(tosimplex);
+	let tographic = document.createElement('input');
+	setAttributes(tographic, {'type':'button', 'value':'Graphic →', 'class':'nextstep', 'onclick': 'checkInputGraphic()', 'style': "margin-top: 15px;"});
+	container.appendChild(tographic);
 }
