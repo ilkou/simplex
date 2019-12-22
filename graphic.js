@@ -19,21 +19,20 @@ function mapPoint(x, y, pixel, scale) {
     return new Point(parseInt(20 + (x * scale) - (pixel / 2)), parseInt(480 - (y * scale) - (pixel / 2)));
 }
 function drawPoint(x, y, s, col) {
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-
+    let canvas = document.getElementById("myCanvas");
+    let ctx = canvas.getContext("2d");
     ctx.fillStyle = col;
     ctx.fillRect(x,y,s,s);
 }
 function drawText(text, x, y) {
-    var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    ctx.font = "10px Arial";
+    let c = document.getElementById("myCanvas");
+    let ctx = c.getContext("2d");
+    ctx.font = "10px Arial Black";
     ctx.fillText(text, x, y);
 }
 function drawLine(x1, y1, x2, y2, col) {
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
+    let canvas = document.getElementById("myCanvas");
+    let ctx = canvas.getContext("2d");
 
     ctx.beginPath();
     ctx.strokeStyle = col;
@@ -83,6 +82,30 @@ function checkValid(point) {
     }
     return (true);
 }
+function createGraphicArray(points, val_opt, z1, z2) {
+    let table = document.getElementById('graph_array');
+    for (let i = 0; i < points.length; i++) {
+        let tr = document.createElement('tr');
+        if (points[i].valid === false)
+            tr.setAttribute('style', 'background-color: #ED7B78;');
+        if ((points[i].x * z1 + points[i].y * z2) == val_opt)
+            tr.setAttribute('style', 'background-color: #96D796;');
+        let td1 = document.createElement('td');
+        let td2 = document.createElement('td');
+        let td3 = document.createElement('td');
+        let td4 = document.createElement('td');
+        td1.appendChild(document.createTextNode(points[i].letter));
+        tr.appendChild(td1);
+        td2.appendChild(document.createTextNode(points[i].x.toString()));
+        tr.appendChild(td2);
+        td3.appendChild(document.createTextNode(points[i].y.toString()));
+        tr.appendChild(td3);
+        td4.appendChild(document.createTextNode((points[i].x * z1 + points[i].y * z2).toString()));
+        tr.appendChild(td4);
+        table.appendChild(tr);
+    }
+}
+//https://stackoverflow.com/questions/8154899/drawing-a-polygon
 function drawSolution(points, scale) {
     let p;
     let canvas = document.getElementById('myCanvas');
@@ -134,7 +157,7 @@ function drawSolution(points, scale) {
 }
 function graphic() {
     document.getElementById('array').style.display = 'none';
-    document.getElementById('myCanvas').style.display = 'block';
+    document.getElementById('graphic').style.display = 'block';
     let e = document.getElementById("fct_obj");
     let choix = e.options[e.selectedIndex].value;
     let points = [], valid = [];
@@ -190,7 +213,6 @@ function graphic() {
         if (points[i].x > maxX) maxX = points[i].x;
         if (points[i].y > maxY) maxY = points[i].y;
     }
-
     let scale = 400 / (maxX > maxY ? maxX : maxY);
     if (scale > 5) {
         let k = 0;
@@ -204,14 +226,21 @@ function graphic() {
             drawText((k++).toString(), 8, i);
         }
     }
+    let letter = 'A';
     for (let i = 0; i < points.length; i++) {
         console.log('intersection : ' + points[i].x.toString() + '  ' + points[i].y.toString());
         p = mapPoint(points[i].x, points[i].y, 4, scale);
         drawPoint(p.x, p.y, 4, "#04adbf");
+        drawText(letter, p.x - 4, p.y - 2);
+        points[i].letter = letter;
+        letter = nextChar(letter);
     }
     for (let i = 0; i < points.length; i++) {
-        if (checkValid(points[i]))
+        points[i].valid = false;
+        if (checkValid(points[i])) {
             valid.push(points[i]);
+            points[i].valid  =true;
+        }
     }
     if (valid.length === 0) {
         console.log("Problème irréalisable : il n'admet pas de solutions réalisables");
@@ -242,6 +271,7 @@ function graphic() {
     drawSolution(valid, scale);
     p = mapPoint(sol_opt.x, sol_opt.y, 0, scale);
     drawText('('+sol_opt.x.toFixed(2).toString()+','+sol_opt.y.toFixed(2).toString()+')', p.x + 2, p.y - 2);
+    createGraphicArray(points, val_opt, z1, z2);
     console.log('valeur optimale : ' + val_opt.toString());
     console.log('solution optimale : X1 = ' + sol_opt.x.toString() + ' X2 = ' + sol_opt.y.toString());
 }

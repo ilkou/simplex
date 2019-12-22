@@ -35,3 +35,6 @@ function is_equal(tab1, tab2, width, height)
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min) ) + min;
 }
+function nextChar(c) {
+	return String.fromCharCode(c.charCodeAt(0) + 1);
+}

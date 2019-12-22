@@ -14,7 +14,7 @@
         
     </head>
     <body>
-    <div id="simpleh" class="title"><h1>Méthode Simplexe</h1></div>
+    <div id="simpleh" class="title"><h2>Méthode Simplexe / Méthode Graphique</h2></div>
     <div class="center_widget" id="init">
         <table border="0" cellpadding="15px">
             <tr>
@@ -38,10 +38,24 @@
         <script src="inc_dec.js"></script>
     </div>
     <div class="center_widget" id="array"></div>
-    <div id="table"></div>
-    <canvas id="myCanvas" width="800" height="500" style="border:1px solid #d3d3d3;"></canvas>
+    <div id="table">
+        <h1>Méthode Simplexe</h1>
+    </div>
+    <div id="graphic">
+        <h1>Méthode Graphique</h1>
+        <canvas id="myCanvas" width="800" height="500" style="border:1px solid #d3d3d3;"></canvas>
+        <table id="graph_array" class='ilk-graph-table'>
+            <tr><th>Point</th><th>X1</th><th>X2</th><th>Valeur de la fonction (Z)</th></tr>
+        </table>
+        <div style="text-align: left; margin-left: 100px; color: #022022">
+        <h3>NOTE : </h3>
+            <div>En <span style="color: #00ff00">vert</span>, les points dont on trouve la solution.</div>
+            <div>En <span style="color: #ED7B78">rouge</span>, les points qui ne satisfont pas les contraintes.</div>
+        </div>
+    </div>
     <script>
-        document.getElementById('myCanvas').style.display = 'none';
+        document.getElementById('table').style.display = 'none';
+        document.getElementById('graphic').style.display = 'none';
     </script>
     <footer id="rights">
         <hr />

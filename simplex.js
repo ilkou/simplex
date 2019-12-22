@@ -1,3 +1,4 @@
+//https://www.h-schmidt.net/FloatConverter/IEEE754.html
 function get_column(tab, width, height, index) {
 	var col  = new Array(height);
 
@@ -226,6 +227,7 @@ function simplex()
 	num_conts = parseInt(num_conts);
 	num_vars = parseInt(num_vars);
 	document.getElementById('array').style.display = 'none';
+	document.getElementById('table').style.display = 'block';
 	/*tab = [
 		["V.B",  "x1" , "x2" , "e1", "e3", "e4", "a2",  "a4",  "b",    "ratio"],
 		["e1",   10,     5,     1,     0,     0,    0,    0,    200,      undefined ],
