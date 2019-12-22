@@ -75,12 +75,12 @@ body {
 	background-image: linear-gradient(to left bottom, #022022, #054b50, #067a85, #04adbf, #00e3fe);
 	border-radius: 20px;
 	width: 700px;
-	height: 70px;
+	height: 130px;
 	box-shadow: 1px 1px 50px #022022;
 	color: white;
 	text-align: center;
 	margin: 0 auto;
-	padding-top: 180px;
+	padding-top: 90px;
 	padding-bottom: 1px;
 }
 .title {
@@ -125,4 +125,8 @@ html, body {
 
 #myCanvas {
 
+}
+
+li span {
+	font-weight: bold
 }

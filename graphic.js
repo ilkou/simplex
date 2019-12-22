@@ -28,6 +28,7 @@ function drawText(text, x, y) {
     let c = document.getElementById("myCanvas");
     let ctx = c.getContext("2d");
     ctx.font = "10px Arial Black";
+    ctx.fillStyle = "Black";
     ctx.fillText(text, x, y);
 }
 function drawLine(x1, y1, x2, y2, col) {
@@ -88,7 +89,7 @@ function createGraphicArray(points, val_opt, z1, z2) {
         let tr = document.createElement('tr');
         if (points[i].valid === false)
             tr.setAttribute('style', 'background-color: #ED7B78;');
-        if ((points[i].x * z1 + points[i].y * z2) == val_opt)
+        if ((points[i].x * z1 + points[i].y * z2) == val_opt && points[i].valid === true)
             tr.setAttribute('style', 'background-color: #96D796;');
         let td1 = document.createElement('td');
         let td2 = document.createElement('td');
@@ -96,11 +97,11 @@ function createGraphicArray(points, val_opt, z1, z2) {
         let td4 = document.createElement('td');
         td1.appendChild(document.createTextNode(points[i].letter));
         tr.appendChild(td1);
-        td2.appendChild(document.createTextNode(points[i].x.toString()));
+        td2.appendChild(document.createTextNode(points[i].x.toFixed(2).toString()));
         tr.appendChild(td2);
-        td3.appendChild(document.createTextNode(points[i].y.toString()));
+        td3.appendChild(document.createTextNode(points[i].y.toFixed(2).toString()));
         tr.appendChild(td3);
-        td4.appendChild(document.createTextNode((points[i].x * z1 + points[i].y * z2).toString()));
+        td4.appendChild(document.createTextNode((points[i].x * z1 + points[i].y * z2).toFixed(2).toString()));
         tr.appendChild(td4);
         table.appendChild(tr);
     }
@@ -110,7 +111,7 @@ function drawSolution(points, scale) {
     let p;
     let canvas = document.getElementById('myCanvas');
     let ctx = canvas.getContext('2d');
-    ctx.fillStyle = "#054b50";
+    ctx.fillStyle = "rgba(18, 202, 70, 0.66)";
     let minX = points[0].x;
     let maxX = points[0].x;
     let minY = points[0].y;
@@ -216,22 +217,24 @@ function graphic() {
     let scale = 400 / (maxX > maxY ? maxX : maxY);
     if (scale > 5) {
         let k = 0;
-        for (let i = 0; i < 780; i += scale) {
+        for (let i = 0; i < 760; i += scale) {
             drawLine(20 + i, 477, 20 + i, 483, "#000000");
-            drawText((k++).toString(), 20 + i, 490);
+            drawText((k++).toString(), 20 + i, 495);
         }
+        drawText("X1", 780, 475);
         k = 0;
         for (let i = 480; i > 20; i -= scale) {
             drawLine(17, i, 23, i, "#000000");
-            drawText((k++).toString(), 8, i);
+            drawText((k++).toString(), 5, i);
         }
+        drawText("X2", 25, 10);
     }
     let letter = 'A';
     for (let i = 0; i < points.length; i++) {
         console.log('intersection : ' + points[i].x.toString() + '  ' + points[i].y.toString());
         p = mapPoint(points[i].x, points[i].y, 4, scale);
         drawPoint(p.x, p.y, 4, "#04adbf");
-        drawText(letter, p.x - 4, p.y - 2);
+        drawText(letter, p.x - 6, p.y - 2);
         points[i].letter = letter;
         letter = nextChar(letter);
     }
@@ -269,8 +272,12 @@ function graphic() {
         return;
     }
     drawSolution(valid, scale);
-    p = mapPoint(sol_opt.x, sol_opt.y, 0, scale);
-    drawText('('+sol_opt.x.toFixed(2).toString()+','+sol_opt.y.toFixed(2).toString()+')', p.x + 2, p.y - 2);
+    for (let i = 0; i < points.length; i++) {
+        if (points[i].valid === true && (points[i].x * z1 + points[i].y * z2) === val_opt) {
+            p = mapPoint(points[i].x, points[i].y, 0, scale);
+            drawText('('+points[i].x.toFixed(2).toString()+','+points[i].y.toFixed(2).toString()+')', p.x + 1, p.y - 8);
+        }
+    }
     createGraphicArray(points, val_opt, z1, z2);
     console.log('valeur optimale : ' + val_opt.toString());
     console.log('solution optimale : X1 = ' + sol_opt.x.toString() + ' X2 = ' + sol_opt.y.toString());
