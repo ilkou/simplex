@@ -5,12 +5,6 @@ class Point {
         this.y = y;
     }
 }
-class Line {
-    constructor(p1, p2) {
-        this.p1 = p1;
-        this.p2 = p2;
-    }
-}
 function sub(p1, p2) {
     return new Point(p1.x - p2.x, p1.y - p2.y);
 }
