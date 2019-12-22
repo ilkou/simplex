@@ -223,6 +223,8 @@ function createEqui(choix) {
 }
 function simplex()
 {
+	num_conts = parseInt(num_conts);
+	num_vars = parseInt(num_vars);
 	document.getElementById('array').style.display = 'none';
 	/*tab = [
 		["V.B",  "x1" , "x2" , "e1", "e3", "e4", "a2",  "a4",  "b",    "ratio"],

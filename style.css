@@ -4,6 +4,9 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+#myCanvas {
+	background-color: white;
+}
 .ilk-table {
 	width: 50%;
 	border: solid 1px #DDEEEE;
@@ -37,10 +40,13 @@ body {
 #simpleh {
 	background-image: linear-gradient(to left bottom, #022022, #054b50, #067a85, #04adbf, #00e3fe);
 	border-radius: 20px;
+	width: 700px;
+	height: 70px;
 	box-shadow: 1px 1px 50px #022022;
 	color: white;
 	text-align: center;
-	padding-top: 200px;
+	margin: 0 auto;
+	padding-top: 180px;
 	padding-bottom: 1px;
 }
 .title {
