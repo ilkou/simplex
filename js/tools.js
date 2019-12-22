@@ -14,13 +14,13 @@ function inArray(element, buffer) {
 function toFloat(num) {
 	if (num == null || num == "")
 		return (parseFloat(0).toFixed(2));
-	return (parseFloat(num).toFixed(5));
+	return (parseFloat(num).toFixed(8));
 }
 function is_equal(tab1, tab2, width, height)
 {
 	for (let i = 0; i < height; i++) {
 		for (let j = 0; j < width; j++) {
-			if (i !== 0 && j !== 0 && parseFloat(tab1[i][j]).toFixed(5).toString() !== parseFloat(tab2[i][j]).toFixed(5).toString())
+			if (i !== 0 && j !== 0 && parseFloat(tab1[i][j]).toFixed(3).toString() !== parseFloat(tab2[i][j]).toFixed(3).toString())
 				return (false);
 			else if (i === 0 && j === 0 && tab1[i][j].toString() !== tab2[i][j].toString())
 				return (false);

@@ -1,4 +1,8 @@
 //https://www.h-schmidt.net/FloatConverter/IEEE754.html
+//http://www.phpsimplex.com/fr/exemple_methode_simplexe.htm?fbclid=IwAR3-F-04GKfXO07xQVUXbME2wqXeUUjN0MyAoCldS_wxxtG4rO9tkXE1Vrw
+//https://bdesgraupes.pagesperso-orange.fr/UPX/Master1/MNM1_corr_doc1.pdf
+//http://eeisti.fr/grug/ING-1/Math/Optimisation%20Lin%C3%A9aire/TD/TD3/TD3_corrig%25E9.pdf?fbclid=IwAR3Zru9HT1Lj93ztB7zVpcg-Zeu_FKgbbYAFFWCbu7plKObJCwQYuCYeEW8
+//https://smart--grid.net/cours-lessons-theory/programmation-lineaire/methode-du-simplexe/
 function get_column(tab, width, height, index) {
 	var col  = new Array(height);
 
@@ -90,9 +94,11 @@ function gauss(tab, m, n, x, y, choix, phase_1) {
 	{
 		new_tab[0][i] = tab[0][i];
 	}
+	tab[x][y] = toFloat(tab[x][y]);
 	new_tab[x][0] = tab[0][y];
 	for(let i = 1; i < m; i++) {
 		for(let j = 1; j < n - 1; j++) {
+			tab[i][j] = toFloat(tab[i][j]);
 			if (j == y) {
 				if (i == x)
 					new_tab[i][j] = 1;
@@ -100,12 +106,12 @@ function gauss(tab, m, n, x, y, choix, phase_1) {
 					new_tab[i][j] = 0;
 			} else {
 				if (i == x)
-					new_tab[i][j] = tab[i][j] / tab[x][y];
+					new_tab[i][j] = (tab[i][j] / tab[x][y]).toFixed(8);
 				else if (!(i == m - 1 && j == n - 2)) {
 					if (tab[i][j] == -tab[x][j] && tab[x][y] == -tab[i][y])
 						new_tab[i][j] = 0.0;
 					else
-						new_tab[i][j] = ((tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y]).toFixed(10);;
+						new_tab[i][j] = ((tab[i][j] * tab[x][y] - tab[i][y] * tab[x][j]) / tab[x][y]).toFixed(8);
 				}
 			}
 		}
@@ -222,6 +228,15 @@ function createEqui(choix) {
 		document.getElementById('x' + x.toString()).value *= -1.0;
 	return (choix === "min" ? "max" : "min");
 }
+function createSaver() {
+	let container = document.getElementById('table');
+	let div = document.createElement('div');
+	div.setAttribute('style', 'position: absolute;left: 50%; transform: translate(-50%, 0);margin-top: 40px');
+	let input = document.createElement('input');
+	setAttributes(input, {'type':'button','value': 'Enregister','onclick': 'window.print()', 'style':'color: white;background-color: #022022;'});
+	div.appendChild(input);
+	container.appendChild(div);
+}
 function simplex()
 {
 	num_conts = parseInt(num_conts);
@@ -261,7 +276,7 @@ function simplex()
 	let choix = 'min';
 	let bland = false;
 
-	printArray(tab, width, height, -1, -1);
+	printArray(tab, width, height, -1, -1, is_phase != 0 ? "Tableau initial de la phase I" : "Tableau initial");
 	if(is_phase != 0) {
 		correction(tab,width,height);
 		while(check_negative(tab, height, width)) {
@@ -276,13 +291,13 @@ function simplex()
 				alert("probleme non bornee : b -> infinie - phase1");
 				return;
 			}
-			printArray(tab, width, height, point[0], point[1]);
+			printArray(tab, width, height, point[0], point[1], "Next");
 
 			tab = gauss(tab,height , width, point[0], point[1], choix, 1);
 		}
 		tab = phas1_to_2(tab, width, height);
 		width -= is_phase;
-		if(parseFloat(tab[height - 1][width - 2]).toFixed(2).toString() != "0.00") {
+		if(toFloat(tab[height - 1][width - 2]) != 0) {
 			alert("Z != 0 => l'ensemble vide");
 			return ;
 		}
@@ -293,9 +308,9 @@ function simplex()
 				tab[height - 1][j] = parseFloat('0');
 		}
 		tab[height - 1][width - 1] = "";
-		printArray(tab, width, height, -1, -1);
+		printArray(tab, width, height, -1, -1, "Tableau final de la phase I");
 		correction(tab, width, height);
-		printArray(tab, width, height, -1, -1);
+		printArray(tab, width, height, -1, -1, "Tableau initial de la phase II");
 		
 	}
 	let e = document.getElementById("fct_obj");
@@ -303,20 +318,31 @@ function simplex()
 	tab_init = tab;
 	init = 0;
 	bland = false;
+	let already = 0;
 	while(check_pos_neg(tab, height, width, choix)) {
-		if (++init > 1 && is_equal(tab, tab_init, width - 1, height)) {
-			console.log('Il y a cyclage');
-			alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
-			bland = true;
-		}
 		let point = pivot(tab, width ,height, choix, bland);
 		if(check_infinie(tab,width,height)) {
 			alert("probleme non bornee : b -> infinie");
 			return;
 		}
-		printArray(tab, width, height, point[0], point[1]);
+		if (already === 1) {
+			printArray(tab, width, height, point[0], point[1], "C’est le Tableau initial => Cyclage");
+			already = 2;
+		}
+		else if (already === 2) {
+			printArray(tab, width, height, point[0], point[1], "Règle de Bland");
+			already = 0;
+		}
+		else
+			printArray(tab, width, height, point[0], point[1], "suivant");
 		tab = gauss(tab,height , width, point[0], point[1], choix, 0);
+		if (++init > 1 && is_equal(tab, tab_init, width - 1, height)) {
+			console.log('Il y a cyclage');
+			bland = true;
+			already = 1;
+		}
 	}
-	printArray(tab, width, height, -1, -1);
+	printArray(tab, width, height, -1, -1, "Tableau final");
+	createSaver();
 }
 

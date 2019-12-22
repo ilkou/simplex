@@ -130,3 +130,31 @@ html, body {
 li span {
 	font-weight: bold
 }
+table caption {
+	font-size: 1.5em;
+	font-weight: bolder;
+	color: #84bdbb;
+	margin-top: 40px;
+}
+#cyclage {
+	font-size: 1.5em;
+	font-weight: bolder;
+	color: #84bdbb;
+	position: absolute;
+	transform: translate(-50%, 0);
+	margin-bottom: 20px;
+	left: 50%;
+}
+#non_borne, #irrealisable {
+	position: absolute;
+	transform: translate(-50%, 0);
+	margin-bottom: 20px;
+	float: none;
+	display: none;
+	color: white;
+	background-color: #022022;
+	margin-top: 15px;
+	left: 50%;
+	font-size: 1.5em;
+	text-align: center;
+}

@@ -1,4 +1,7 @@
 //http://www.cours-et-exercices.com/2016/03/resolution-dun-programme-lineaire-pl.html
+//https://www.hexcolortool.com/#605e7d,0.64
+//http://www.phpsimplex.com/simplex/grafico2.php?o=max&x1=3&x2=5&rt=3&v=2&l=fr&r1_1=1&r1_2=0&d1=-1&y1=4&r2_1=0&r2_2=2&d2=-1&y2=12&r3_1=3&r3_2=2&d3=-1&y3=18&Submit=Continuer#
+//http://www.cours-et-exercices.com/2016/03/resolution-dun-programme-lineaire-pl.html
 class Point {
     constructor(x, y) {
         this.x = x;
@@ -41,6 +44,7 @@ function drawLine(x1, y1, x2, y2, col) {
     ctx.lineTo(x2, y2);
     ctx.stroke();
 }
+//https://www.mathforu.com/hors-programme/resoudre-un-systeme-avec-les-formules-de-cramer/
 function solveSystem(a, b, c, a2, b2, c2) {
     let sol = new Point();
     if (a * b2 - b * a2 == 0)
@@ -125,7 +129,7 @@ function drawSolution(points, scale) {
     }
 
     // choose a "central" point
-    let center = new Point (minX + (maxX - minX) / 2,minY + (maxY - minY) / 2);
+    let center = new Point(minX + (maxX - minX) / 2,minY + (maxY - minY) / 2);
 
     // precalculate the angles of each point to avoid multiple calculations on sort
     for (let i = 0; i < points.length; i++) {
@@ -156,6 +160,24 @@ function drawSolution(points, scale) {
     ctx.stroke();
     ctx.fill();
 }
+function drawContainer(scale) {
+    let k = 0;
+    for (let i = 0; i < 760; i += scale) {
+        drawLine(20 + i, 477, 20 + i, 483, "#000000");
+        drawText((k++).toString(), 20 + i, 495);
+    }
+    drawText("X1", 780, 475);
+    k = 0;
+    for (let i = 480; i > 20; i -= scale) {
+        drawLine(17, i, 23, i, "#000000");
+        drawText((k++).toString(), 5, i);
+    }
+    drawText("X2", 25, 10);
+    for (let i = 0; i < 760; i += scale)
+        drawLine(i + 20, 20, i + 20, 480, "rgba(96, 94, 125, 0.64)");
+    for (let i = 480; i > 20; i -= scale)
+        drawLine(20, i, 780, i, "rgba(96, 94, 125, 0.64)");
+}
 function graphic() {
     document.getElementById('array').style.display = 'none';
     document.getElementById('graphic').style.display = 'block';
@@ -164,6 +186,7 @@ function graphic() {
     let points = [], valid = [];
     let p;
     let sol_opt, val_opt;
+    let non_bornee = false;
     drawLine(10, 480, 790, 480, "#FF0000");
     drawLine(20, 10, 20, 490, "#FF0000");
     drawPoint(18, 478, 4, "#000000");
@@ -215,20 +238,9 @@ function graphic() {
         if (points[i].y > maxY) maxY = points[i].y;
     }
     let scale = 400 / (maxX > maxY ? maxX : maxY);
-    if (scale > 5) {
-        let k = 0;
-        for (let i = 0; i < 760; i += scale) {
-            drawLine(20 + i, 477, 20 + i, 483, "#000000");
-            drawText((k++).toString(), 20 + i, 495);
-        }
-        drawText("X1", 780, 475);
-        k = 0;
-        for (let i = 480; i > 20; i -= scale) {
-            drawLine(17, i, 23, i, "#000000");
-            drawText((k++).toString(), 5, i);
-        }
-        drawText("X2", 25, 10);
-    }
+    scale = scale === Infinity ? 30 : scale;
+    if (scale > 5)
+        drawContainer(scale);
     let letter = 'A';
     for (let i = 0; i < points.length; i++) {
         console.log('intersection : ' + points[i].x.toString() + '  ' + points[i].y.toString());
@@ -237,6 +249,10 @@ function graphic() {
         drawText(letter, p.x - 6, p.y - 2);
         points[i].letter = letter;
         letter = nextChar(letter);
+    }
+    if (choix == 'min') {
+        points.push(new Point(50000, 0));
+        points.push(new Point(0, 50000));
     }
     for (let i = 0; i < points.length; i++) {
         points[i].valid = false;
@@ -247,10 +263,14 @@ function graphic() {
     }
     if (valid.length === 0) {
         console.log("Problème irréalisable : il n'admet pas de solutions réalisables");
+        document.getElementById('graph_array').style.display = 'none';
+        document.getElementById('note').style.display = 'none';
+        document.getElementById('irrealisable').style.display = 'block';
         return ;
     }
     let z1 = toFloat(eval(document.getElementById('x1').value));
     let z2 = toFloat(eval(document.getElementById('x2').value));
+    console.log('x1 ->' + z1.toString() + ' x2 ->' +  z2.toString());
     val_opt = valid[0].x * z1 + valid[0].y * z2;
     sol_opt = valid[0];
     console.log('nombre de points realisable : ' + valid.length.toString());
@@ -267,18 +287,26 @@ function graphic() {
             sol_opt = valid[i];
         }
     }
-    if (choix === 'max' && val_opt === 0) {
-        console.log("Problème non borné : aucune des solutions réalisables n'est optimale");
-        return;
-    }
-    drawSolution(valid, scale);
-    for (let i = 0; i < points.length; i++) {
-        if (points[i].valid === true && (points[i].x * z1 + points[i].y * z2) === val_opt) {
-            p = mapPoint(points[i].x, points[i].y, 0, scale);
-            drawText('('+points[i].x.toFixed(2).toString()+','+points[i].y.toFixed(2).toString()+')', p.x + 1, p.y - 8);
+    if (choix === 'max' && (checkValid(new Point(sol_opt.x, sol_opt.y + 1)) || checkValid(new Point(sol_opt.x + 1, sol_opt.y) || checkValid(new Point(sol_opt.x + 1, sol_opt.y + 1)))))
+        non_bornee = true;
+    if (choix === 'min' && (checkValid(new Point(sol_opt.x, sol_opt.y - 1)) || checkValid(new Point(sol_opt.x - 1, sol_opt.y) || checkValid(new Point(sol_opt.x - 1, sol_opt.y - 1)))))
+        non_bornee = true;
+    if (non_bornee === false) {
+        drawSolution(valid, scale);
+        for (let i = 0; i < points.length; i++) {
+            if (points[i].valid === true && (points[i].x * z1 + points[i].y * z2) === val_opt) {
+                p = mapPoint(points[i].x, points[i].y, 0, scale);
+                drawText('(' + points[i].x.toFixed(2).toString() + ',' + points[i].y.toFixed(2).toString() + ')', p.x + 1, p.y - 8);
+            }
         }
+        createGraphicArray(points, val_opt, z1, z2);
+        console.log('valeur optimale : ' + val_opt.toString());
+        console.log('solution optimale : X1 = ' + sol_opt.x.toString() + ' X2 = ' + sol_opt.y.toString());
     }
-    createGraphicArray(points, val_opt, z1, z2);
-    console.log('valeur optimale : ' + val_opt.toString());
-    console.log('solution optimale : X1 = ' + sol_opt.x.toString() + ' X2 = ' + sol_opt.y.toString());
+    else {
+        console.log("Problème non borné : aucune des solutions réalisables n'est optimale");
+        document.getElementById('graph_array').style.display = 'none';
+        document.getElementById('note').style.display = 'none';
+        document.getElementById('non_borne').style.display = 'block';
+    }
 }

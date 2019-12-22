@@ -1,7 +1,10 @@
-function printArray(tab, width, height, px, py)
+function printArray(tab, width, height, px, py, title)
 {
 	let container = document.getElementById('table');
 	let table = document.createElement('table');
+	let cap = document.createElement('caption');
+	cap.appendChild(document.createTextNode(title));
+	table.appendChild(cap);
 	setAttributes(table, {'class':'ilk-table', 'border': 1, 'cellspacing': 2, 'cellpadding': 1, 'style': 'margin: 0 auto;'});
 	for (let i = 0; i < height ; i++) {
 		let tr = document.createElement('tr');
