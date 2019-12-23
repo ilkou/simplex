@@ -10,6 +10,7 @@ function backPage()
         document.getElementById('array').style.display = 'block';
     }
 }
+
 function backPage2()
 {
     document.getElementById('array').style.display = 'block';
