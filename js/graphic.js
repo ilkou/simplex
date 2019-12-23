@@ -181,6 +181,7 @@ function drawContainer(scale) {
 function graphic() {
     document.getElementById('array').style.display = 'none';
     document.getElementById('graphic').style.display = 'block';
+    document.title = 'Graphique';
     let e = document.getElementById("fct_obj");
     let choix = e.options[e.selectedIndex].value;
     let points = [], valid = [];
@@ -250,7 +251,7 @@ function graphic() {
         points[i].letter = letter;
         letter = nextChar(letter);
     }
-    if (choix == 'min') {
+    if (choix === 'min' && points.length > 1) {
         points.push(new Point(50000, 0));
         points.push(new Point(0, 50000));
     }

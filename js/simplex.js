@@ -243,6 +243,7 @@ function simplex()
 	num_vars = parseInt(num_vars);
 	document.getElementById('array').style.display = 'none';
 	document.getElementById('table').style.display = 'block';
+	document.title = 'Simplexe';
 	/*tab = [
 		["V.B",  "x1" , "x2" , "e1", "e3", "e4", "a2",  "a4",  "b",    "ratio"],
 		["e1",   10,     5,     1,     0,     0,    0,    0,    200,      undefined ],
