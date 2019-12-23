@@ -65,14 +65,14 @@ function checkValid(point) {
             operator = document.getElementById("operator" + i.toString()).value;
         }
         if (operator === '>') {
-            if (x1 * point.x + y1 * point.y < b1)
+            if (toFloat(x1 * point.x + y1 * point.y) < toFloat(b1))
                 return (false);
         }
         else if (operator === '<') {
-            if (x1 * point.x + y1 * point.y > b1)
+            if (toFloat(x1 * point.x + y1 * point.y) > toFloat(b1))
                 return (false);
         }
-        else if (x1 * point.x + y1 * point.y !== b1)
+        else if (toFloat(x1 * point.x + y1 * point.y) !== toFloat(b1))
             return (false);
     }
     return (true);
@@ -257,9 +257,9 @@ function graphic() {
             sol_opt = valid[i];
         }
     }
-    if (choix === 'max' && (checkValid(new Point(sol_opt.x, sol_opt.y + 1)) || checkValid(new Point(sol_opt.x + 1, sol_opt.y) || checkValid(new Point(sol_opt.x + 1, sol_opt.y + 1)))))
+    if (choix === 'max' && (checkValid(new Point(sol_opt.x, sol_opt.y + 50000)) || checkValid(new Point(sol_opt.x + 50000, sol_opt.y) || checkValid(new Point(sol_opt.x + 50000, sol_opt.y + 50000)))))
         non_bornee = true;
-    if (choix === 'min' && (checkValid(new Point(sol_opt.x, sol_opt.y - 1)) || checkValid(new Point(sol_opt.x - 1, sol_opt.y) || checkValid(new Point(sol_opt.x - 1, sol_opt.y - 1)))))
+    if (choix === 'min' && (checkValid(new Point(sol_opt.x, sol_opt.y - 50000)) || checkValid(new Point(sol_opt.x - 50000, sol_opt.y) || checkValid(new Point(sol_opt.x - 50000, sol_opt.y - 50000)))))
         non_bornee = true;
     if (non_bornee === false) {
         drawSolution(valid, scale, points.length, choix);

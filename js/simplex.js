@@ -244,6 +244,8 @@ function simplex()
 	let back = document.createElement('input');
 	setAttributes(back, {'type':'button', 'value':'← back', 'class':'nextstep', 'onclick': 'backPage2()', 'style': "float: left; margin-top: 15px;"});
 	document.getElementById('table').appendChild(back);
+	document.getElementById('table').appendChild(document.createElement('br'));
+	document.getElementById('table').appendChild(document.createElement('br'));
 	printSystem("simp_sys");
 	let all = getArray();
 	let tab = all[0];
@@ -261,7 +263,6 @@ function simplex()
 		while(check_negative(tab, height, width)) {
 			if (++init > 1 && is_equal(tab, tab_init, width - 1, height)) {
 				console.log('Il y a cyclage');
-				//alert('Le tableau est identique au tableau initial ! Il y a cyclage ');
 				bland = true;
 			}
 			var point =  pivot(tab, width ,height, choix, bland);
