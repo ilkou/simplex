@@ -56,18 +56,8 @@ function solveSystem(a, b, c, a2, b2, c2) {
 function checkValid(point) {
     for (let i = 1; i <= num_conts + 2; i++) {
         let b1, x1, y1, operator;
-        if (i === num_conts + 1) {
-            b1 = 0;
-            x1 = 1;
-            y1 = 0;
-            operator = '>';
-        }
-        else if (i === num_conts + 2) {
-            b1 = 0;
-            x1 = 0;
-            y1 = 1;
-            operator = '>';
-        }
+        if (i === num_conts + 1) { b1 = 0; x1 = 1; y1 = 0; operator = '>'; }
+        else if (i === num_conts + 2) { b1 = 0; x1 = 0; y1 = 1; operator = '>';}
         else {
             b1 = toFloat(eval(document.getElementById('b' + i.toString()).value));
             x1 = toFloat(eval(document.getElementById('coef[' + i.toString() + '][1]').value));
@@ -111,7 +101,7 @@ function createGraphicArray(points, val_opt, z1, z2) {
     }
 }
 //https://stackoverflow.com/questions/8154899/drawing-a-polygon
-function drawSolution(points, scale) {
+function drawSolution(points, scale, len, choix) {
     let p;
     let canvas = document.getElementById('myCanvas');
     let ctx = canvas.getContext('2d');
@@ -120,18 +110,17 @@ function drawSolution(points, scale) {
     let maxX = points[0].x;
     let minY = points[0].y;
     let maxY = points[0].y;
-
+    if (choix === 'min' && len > 1) {
+        points.push(new Point(50000, 0));
+        points.push(new Point(0, 50000));
+    }
     for (let i = 1; i < points.length; i++) {
         if (points[i].x < minX) minX = points[i].x;
         if (points[i].x > maxX) maxX = points[i].x;
         if (points[i].y < minY) minY = points[i].y;
         if (points[i].y > maxY) maxY = points[i].y;
     }
-
-    // choose a "central" point
     let center = new Point(minX + (maxX - minX) / 2,minY + (maxY - minY) / 2);
-
-    // precalculate the angles of each point to avoid multiple calculations on sort
     for (let i = 0; i < points.length; i++) {
         points[i].angle = Math.acos((points[i].x - center.x) / lineDistance(center, points[i]));
 
@@ -139,24 +128,18 @@ function drawSolution(points, scale) {
             points[i].angle = Math.PI + Math.PI - points[i].angle;
         }
     }
-
-    // sort by angle
     points = points.sort(function(a, b) {
         return a.angle - b.angle;
     });
-
-    // Draw shape
     ctx.beginPath();
     p = mapPoint(points[0].x, points[0].y, 0, scale);
     ctx.moveTo(p.x, p.y);
-
     for (var i = 1; i < points.length; i++) {
         p = mapPoint(points[i].x, points[i].y, 0, scale);
         ctx.lineTo(p.x, p.y);
     }
     p = mapPoint(points[0].x, points[0].y, 0, scale);
     ctx.lineTo(p.x, p.y);
-
     ctx.stroke();
     ctx.fill();
 }
@@ -178,10 +161,38 @@ function drawContainer(scale) {
     for (let i = 480; i > 20; i -= scale)
         drawLine(20, i, 780, i, "rgba(96, 94, 125, 0.64)");
 }
+function createSystem() {
+    let points = [];
+    for (let i = 1; i <= num_conts + 2; i++) {
+        let b1, x1, y1;
+        if (i === num_conts + 1) { b1 = 0; x1 = 1; y1 = 0;}
+        else if (i === num_conts + 2) { b1 = 0; x1 = 0; y1 = 1;}
+        else {
+            b1 = toFloat(eval(document.getElementById('b' + i.toString()).value));
+            x1 = toFloat(eval(document.getElementById('coef[' + i.toString() + '][1]').value));
+            y1 = toFloat(eval(document.getElementById('coef[' + i.toString() + '][2]').value));
+        }
+        for (let j = i + 1; j <= num_conts + 2; j++) {
+            let b2 = 0, x2 = 0, y2 = 0;
+            if (j === num_conts + 1) { b2 = 0; x2 = 1; y2 = 0;}
+            else if (j === num_conts + 2) { b2 = 0; x2 = 0; y2 = 1; }
+            else {
+                b2 = toFloat(eval(document.getElementById('b' + j.toString()).value));
+                x2 = toFloat(eval(document.getElementById('coef[' + j.toString() + '][1]').value));
+                y2 = toFloat(eval(document.getElementById('coef[' + j.toString() + '][2]').value));
+            }
+            if ((p = solveSystem(x1, y1, b1, x2, y2, b2)) !== undefined) {
+                points.push(p);
+            }
+        }
+    }
+    return points;
+}
 function graphic() {
     document.getElementById('array').style.display = 'none';
     document.getElementById('graphic').style.display = 'block';
     document.title = 'Graphique';
+    printSystem("graph_sys");
     let e = document.getElementById("fct_obj");
     let choix = e.options[e.selectedIndex].value;
     let points = [], valid = [];
@@ -193,45 +204,7 @@ function graphic() {
     drawPoint(18, 478, 4, "#000000");
     num_conts = parseInt(num_conts);
     num_vars = parseInt(num_vars);
-    for (let i = 1; i <= num_conts + 2; i++) {
-        let b1, x1, y1;
-        if (i === num_conts + 1) {
-            b1 = 0;
-            x1 = 1;
-            y1 = 0;
-        }
-        else if (i === num_conts + 2) {
-            b1 = 0;
-            x1 = 0;
-            y1 = 1;
-        }
-        else {
-            b1 = toFloat(eval(document.getElementById('b' + i.toString()).value));
-            x1 = toFloat(eval(document.getElementById('coef[' + i.toString() + '][1]').value));
-            y1 = toFloat(eval(document.getElementById('coef[' + i.toString() + '][2]').value));
-        }
-        for (let j = i + 1; j <= num_conts + 2; j++) {
-            let b2 = 0, x2 = 0, y2 = 0;
-            if (j === num_conts + 1) {
-                b2 = 0;
-                x2 = 1;
-                y2 = 0;
-            }
-            else if (j === num_conts + 2) {
-                b2 = 0;
-                x2 = 0;
-                y2 = 1;
-            }
-            else {
-                b2 = toFloat(eval(document.getElementById('b' + j.toString()).value));
-                x2 = toFloat(eval(document.getElementById('coef[' + j.toString() + '][1]').value));
-                y2 = toFloat(eval(document.getElementById('coef[' + j.toString() + '][2]').value));
-            }
-            if ((p = solveSystem(x1, y1, b1, x2, y2, b2)) !== undefined) {
-                points.push(p);
-            }
-        }
-    }
+    points = createSystem();
     let maxX = points[0].x;
     let maxY = points[0].y;
     for (let i = 1; i < points.length; i++) {
@@ -240,7 +213,7 @@ function graphic() {
     }
     let scale = 400 / (maxX > maxY ? maxX : maxY);
     scale = scale === Infinity ? 30 : scale;
-    if (scale > 5)
+    if (scale > 12)
         drawContainer(scale);
     let letter = 'A';
     for (let i = 0; i < points.length; i++) {
@@ -250,10 +223,6 @@ function graphic() {
         drawText(letter, p.x - 6, p.y - 2);
         points[i].letter = letter;
         letter = nextChar(letter);
-    }
-    if (choix === 'min' && points.length > 1) {
-        points.push(new Point(50000, 0));
-        points.push(new Point(0, 50000));
     }
     for (let i = 0; i < points.length; i++) {
         points[i].valid = false;
@@ -293,7 +262,7 @@ function graphic() {
     if (choix === 'min' && (checkValid(new Point(sol_opt.x, sol_opt.y - 1)) || checkValid(new Point(sol_opt.x - 1, sol_opt.y) || checkValid(new Point(sol_opt.x - 1, sol_opt.y - 1)))))
         non_bornee = true;
     if (non_bornee === false) {
-        drawSolution(valid, scale);
+        drawSolution(valid, scale, points.length, choix);
         for (let i = 0; i < points.length; i++) {
             if (points[i].valid === true && (points[i].x * z1 + points[i].y * z2) === val_opt) {
                 p = mapPoint(points[i].x, points[i].y, 0, scale);

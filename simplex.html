@@ -6,6 +6,8 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <script src="js/tools.js"></script>
         <script src="js/printArray.js"></script>
+        <script src="js/system.js"></script>
+        <script src="js/back.js"></script>
         <script src="js/createObjFunction.js"></script>
         <script src="js/createContraintes.js"></script>
         <script src="js/getArray.js"></script>
@@ -15,7 +17,6 @@
         
     </head>
     <body>
-
     <div id="simpleh" class="title"><h2>Méthode Simplexe / Méthode Graphique</h2></div>
     <div class="center_widget" id="init">
         <table border="0" cellpadding="15px">
@@ -42,9 +43,12 @@
     <div class="center_widget" id="array"></div>
     <div id="table">
         <h1>Méthode Simplexe</h1>
+        <div id="simp_sys"></div>
     </div>
     <div id="graphic">
+        <input type="button" value="← back" class="nextstep" onclick="backPage3()" style="float: left; margin-top: 15px;">
         <h1>Méthode Graphique</h1>
+        <div id="graph_sys"></div>
         <canvas id="myCanvas" width="800" height="500" style="border:1px solid #d3d3d3;"></canvas>
         <table id="graph_array" class='ilk-graph-table'>
             <tr><th>Point</th><th>X1</th><th>X2</th><th>Valeur de la fonction (Z)</th></tr>

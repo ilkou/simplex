@@ -4,7 +4,7 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
-#graphic, #table h1 {
+#graphic, #table h1, #simp_sys {
 	margin: 0 auto;
 	text-align: center;
 	color: white;

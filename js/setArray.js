@@ -72,21 +72,24 @@ function clearInput() {
 	}
 }
 function setArray() {
-	document.getElementById('init').remove();
-	document.getElementById('rights').remove();
-	document.getElementById('simpleh').remove();
+	document.getElementById('init').style.display = 'none';
+	document.getElementById('rights').style.display = 'none';
+	document.getElementById('simpleh').style.display = 'none';
 	let container = document.getElementById('array');
 	if (parseInt(num_vars) > 15 || parseInt(num_conts) > 15)
 		container.removeAttribute("class");
 	createObjFunction(container, num_vars);
 	createContraintes(container, num_vars, num_conts);
-	let clearInput = document.createElement('input');
-	setAttributes(clearInput, {'type':'button', 'value':'Clear', 'class':'nextstep', 'onclick': 'clearInput()', 'style': "margin-top: 15px; float: left"});
-	container.appendChild(clearInput);
 	let tosimplex = document.createElement('input');
 	setAttributes(tosimplex, {'type':'button', 'value':'Simplex →', 'class':'nextstep', 'onclick': 'checkInputSimplex()', 'style': "margin-top: 15px;"});
 	container.appendChild(tosimplex);
 	let tographic = document.createElement('input');
 	setAttributes(tographic, {'type':'button', 'value':'Graphic →', 'class':'nextstep', 'onclick': 'checkInputGraphic()', 'style': "margin-top: 15px;"});
 	container.appendChild(tographic);
+	let clearInput = document.createElement('input');
+	setAttributes(clearInput, {'type':'button', 'value':'Clear', 'class':'nextstep', 'onclick': 'clearInput()', 'style': "margin-top: 15px;"});
+	container.appendChild(clearInput);
+	let back = document.createElement('input');
+	setAttributes(back, {'type':'button', 'value':'← back', 'class':'nextstep', 'onclick': 'backPage()', 'style': "margin-top: 15px; float: left"});
+	container.appendChild(back);
 }

@@ -26,10 +26,18 @@ function cout_index_max(tab1d, taille) {
 	return (max_index);
 }
 
-function cout_index_min_bland(tab1d, taille) {
-	for (var i = 1; i < taille; i++) {
-		if (parseFloat(tab1d[i]) < 0.0)
-			return (i);
+function cout_index_min_bland(tab1d, taille, choix) {
+	if (choix == 'min') {
+		for (let i = 1; i < taille; i++) {
+			if (parseFloat(tab1d[i]) < 0.0)
+				return (i);
+		}
+	}
+	else {
+		for (let i = 1; i < taille; i++) {
+			if (parseFloat(tab1d[i]) > 0.0)
+				return (i);
+		}
 	}
 	return (1);
 }
@@ -56,7 +64,7 @@ function pivot(tab, n, m, choix, bland) {
 	if(choix === 'max')
 		point[1] = cout_index_max(tab[m - 1], n);
 	else if(choix === 'min' && bland)
-		point[1] = cout_index_min_bland(tab[m - 1], n - 2);
+		point[1] = cout_index_min_bland(tab[m - 1], n - 2, choix);
 	else if(choix === 'min')
 		point[1] = cout_index_min(tab[m - 1], n - 2);
 
@@ -85,13 +93,11 @@ function cout(tab, width, height, phase_1) {
 
 function gauss(tab, m, n, x, y, choix, phase_1) {
 	let new_tab = new Array(m);
-	for(let i = 0; i < m; i++)
-	{
+	for(let i = 0; i < m; i++) {
 		new_tab[i] = new Array(n);
 		new_tab[i][0] = tab[i][0];
 	}
-	for(let i = 0 ; i < n; i++)
-	{
+	for(let i = 0 ; i < n; i++) {
 		new_tab[0][i] = tab[0][i];
 	}
 	tab[x][y] = toFloat(tab[x][y]);
@@ -131,8 +137,7 @@ function check_positive(tab, m, width)
 
 function check_negative(tab, m, width)
 {
-	for(var i = 1; i < width - 2; i++)
-	{
+	for(var i = 1; i < width - 2; i++) {
 		if (tab[m - 1][i] < 0)
 			return (true);
 	}
@@ -142,8 +147,7 @@ function check_negative(tab, m, width)
 function get_line_index(tab, m, index)
 {
 
-	for (var i = 1; i < m - 1; i++)
-	{
+	for (var i = 1; i < m - 1; i++) {
 		if(tab[i][index] == 1)
 			return (i);
 	}
@@ -162,14 +166,11 @@ function correction(tab, width, height)
 {
 	var index_line;
 
-	for (var i = 1; i < (width - 2); i++)
-	{
-		if(tab[height - 1][i] != 0 && check_base(tab, tab[0][i], height))
-		{
+	for (var i = 1; i < (width - 2); i++) {
+		if(tab[height - 1][i] != 0 && check_base(tab, tab[0][i], height)) {
 			index_line = get_line_index(tab, height, i);
 			var x = tab[height - 1][i];
-			for(var j = 1; j < width - 1; j++)
-			{   
+			for(var j = 1; j < width - 1; j++) {
 				tab[height - 1][j] = tab[height - 1][j] - tab[index_line][j] * (x / tab[index_line][i]);
 			}
 		}
@@ -191,20 +192,15 @@ function phas1_to_2(tab, n, m)
 	var new_tab = new Array(m); ////  taille
 	var x = 0;
 	var y;
-	for(var i = 0; i < m; i++)
-	{
+	for(var i = 0; i < m; i++) {
 		new_tab[i] = new Array(n);
 	}
-	for(var i = 0; i < m; i++)
-	{
-		if(!(tab[i][0][0] === "a"))
-		{
+	for(var i = 0; i < m; i++) {
+		if(!(tab[i][0][0] === "a")) {
 			y = 0;
-			for(var j = 0; j < n; j++)
-			{
+			for(var j = 0; j < n; j++) {
 
-				if(!(tab[0][j][0] === "a"))
-				{
+				if(!(tab[0][j][0] === "a")) {
 					new_tab[x][y] = tab[i][j];
 					y++;
 				}
@@ -237,6 +233,7 @@ function createSaver() {
 	div.appendChild(input);
 	container.appendChild(div);
 }
+
 function simplex()
 {
 	num_conts = parseInt(num_conts);
@@ -244,29 +241,10 @@ function simplex()
 	document.getElementById('array').style.display = 'none';
 	document.getElementById('table').style.display = 'block';
 	document.title = 'Simplexe';
-	/*tab = [
-		["V.B",  "x1" , "x2" , "e1", "e3", "e4", "a2",  "a4",  "b",    "ratio"],
-		["e1",   10,     5,     1,     0,     0,    0,    0,    200,      undefined ],
-		["a2",   2,      3,     0,     0,     0 ,   1,    0,    60,      undefined  ],
-		["e3",   1,      0,     0,     1,     0,    0,    0,    12,      undefined ],
-		["a4",   0,      1,     0,     0,     -1,   0,    1,    6,      undefined ],
-		["cout", 0,      0,     0,     0,     0,    1,    1,     0,       undefined ]
-	];*/
-	/*tab = [
-		["V.B",  "x1" , "x2" , "x3", "x4", "e1", "e2",  "e3",  "b",    "ratio"],
-		["e1",   0.25,     -60,     -0.04,     9,     1,    0,    0,    0,      undefined ],
-		["e2",   0.5,      -90,     -0.02,     3,     0 ,   1,    0,    0,      undefined  ],
-		["e3",   0,      0,     1,     0,     0,    0,    1,    1,      undefined ],
-		["cout", 0.75,      -150,     0.02,     -6,     0,    0,    0,     0,       undefined ]
-	];*/
-	/*tab = [
-		["V.B",  "x1" , "x2" , "x3",  "x4",  "e1",  "e2",  "e3",  "e4",  "b",    "ratio"],
-		["e1" ,   0.25,   -60,-0.04,     9,     1,     0,    0,      0,     , undefined ],
-		["e2" ,   0.5 ,   -90,-0.02,     3,     0,     1,    0,      0,     , undefined  ],
-		["e3" ,   0   ,     0,    1,     0,     0,     0,    1,      0,     , undefined ],
-		["e4" ,   0   ,     0,    1,     0,     0,     0,    0,      1,     , undefined ],
-		["cout",  0.75,   -150, 0.02,   -6,     0,     0,    0,      0,     ,  undefined ]
-	];*/
+	let back = document.createElement('input');
+	setAttributes(back, {'type':'button', 'value':'← back', 'class':'nextstep', 'onclick': 'backPage2()', 'style': "float: left; margin-top: 15px;"});
+	document.getElementById('table').appendChild(back);
+	printSystem("simp_sys");
 	let all = getArray();
 	let tab = all[0];
 	let tab_init = tab;
@@ -296,6 +274,7 @@ function simplex()
 
 			tab = gauss(tab,height , width, point[0], point[1], choix, 1);
 		}
+		printArray(tab, width, height, -1, -1, "Tableau final de la phase I");
 		tab = phas1_to_2(tab, width, height);
 		width -= is_phase;
 		if(toFloat(tab[height - 1][width - 2]) != 0) {
@@ -309,10 +288,9 @@ function simplex()
 				tab[height - 1][j] = parseFloat('0');
 		}
 		tab[height - 1][width - 1] = "";
-		printArray(tab, width, height, -1, -1, "Tableau final de la phase I");
-		correction(tab, width, height);
 		printArray(tab, width, height, -1, -1, "Tableau initial de la phase II");
-		
+		correction(tab, width, height);
+		printArray(tab, width, height, -1, -1, "Correction");
 	}
 	let e = document.getElementById("fct_obj");
 	choix = e.options[e.selectedIndex].value;
